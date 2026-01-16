@@ -217,7 +217,7 @@ class TimeTraceMiddleware:
         if not cassette_path:
             # Try to find matching cassette by path
             # For now, require explicit cassette_path
-            print("timetracer [WARN] replay mode requires TIMETRACE_CASSETTE", file=sys.stderr)
+            print("timetracer [WARN] replay mode requires TIMETRACER_CASSETTE", file=sys.stderr)
             await self.app(scope, receive, send)
             return
 
@@ -475,3 +475,63 @@ class TimeTraceMiddleware:
             f"runtime={duration_ms:.0f}ms  recorded={recorded_duration:.0f}ms",
             file=sys.stderr,
         )
+
+
+def auto_setup(
+    app: Any,
+    config: TraceConfig | None = None,
+    plugins: list[str] | None = None,
+) -> Any:
+    """
+    One-line Timetracer setup for FastAPI.
+
+    Adds middleware and enables plugins automatically.
+
+    Args:
+        app: FastAPI application instance.
+        config: Optional TraceConfig. If None, loads from environment.
+        plugins: List of plugins to enable. Default: ["httpx"].
+                 Options: "httpx", "requests", "sqlalchemy", "redis"
+
+    Returns:
+        The app instance (for chaining).
+
+    Usage:
+        from fastapi import FastAPI
+        from timetracer.integrations.fastapi import auto_setup
+
+        app = auto_setup(FastAPI())
+
+        # Or with options:
+        app = FastAPI()
+        auto_setup(app, plugins=["httpx", "redis"])
+    """
+    from timetracer.plugins import enable_httpx
+
+    cfg = config or TraceConfig.from_env()
+
+    # Add middleware
+    app.add_middleware(TimeTraceMiddleware, config=cfg)
+
+    # Enable plugins
+    enabled_plugins = plugins or ["httpx"]
+
+    for plugin in enabled_plugins:
+        if plugin == "httpx":
+            from timetracer.plugins import enable_httpx
+            enable_httpx()
+        elif plugin == "requests":
+            from timetracer.plugins import enable_requests
+            enable_requests()
+        elif plugin == "sqlalchemy":
+            from timetracer.plugins import enable_sqlalchemy
+            enable_sqlalchemy()
+        elif plugin == "redis":
+            from timetracer.plugins import enable_redis
+            enable_redis()
+
+    return app
+
+
+# Backwards compatibility alias
+timetracerMiddleware = TimeTraceMiddleware

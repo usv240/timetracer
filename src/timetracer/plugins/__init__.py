@@ -15,7 +15,7 @@ except ImportError:
     _HAS_SQLALCHEMY = False
 
     def enable_sqlalchemy(*args, **kwargs):
-        raise ImportError("sqlalchemy is required. Install with: pip install timetrace[sqlalchemy]")
+        raise ImportError("sqlalchemy is required. Install with: pip install timetracer[sqlalchemy]")
 
     def disable_sqlalchemy(*args, **kwargs):
         pass
@@ -28,7 +28,7 @@ except ImportError:
     _HAS_REDIS = False
 
     def enable_redis(*args, **kwargs):
-        raise ImportError("redis is required. Install with: pip install timetrace[redis]")
+        raise ImportError("redis is required. Install with: pip install timetracer[redis]")
 
     def disable_redis(*args, **kwargs):
         pass

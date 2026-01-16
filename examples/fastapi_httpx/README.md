@@ -24,10 +24,10 @@ Record real API calls to cassettes:
 
 ```bash
 # Start server in record mode
-$env:TIMETRACE_MODE="record"; uvicorn app:app --reload
+$env:TIMETRACER_MODE="record"; uvicorn app:app --reload
 
 # Or on Unix:
-# TIMETRACE_MODE=record uvicorn app:app --reload
+# TIMETRACER_MODE=record uvicorn app:app --reload
 ```
 
 Make some requests:
@@ -57,8 +57,8 @@ Replay using recorded cassettes (no network calls):
 timetrace list --dir ./cassettes
 
 # Start server in replay mode
-$env:TIMETRACE_MODE="replay"
-$env:TIMETRACE_CASSETTE="./cassettes/2026-01-15/POST__checkout__abcd1234.json"
+$env:TIMETRACER_MODE="replay"
+$env:TIMETRACER_CASSETTE="./cassettes/2026-01-15/POST__checkout__abcd1234.json"
 uvicorn app:app --reload
 
 # Make the same request - external calls are mocked!
@@ -84,8 +84,8 @@ timetrace show ./cassettes/2026-01-15/POST__checkout__abcd1234.json --events
 
 | Variable | Description |
 |----------|-------------|
-| `TIMETRACE_MODE` | `off`, `record`, or `replay` |
-| `TIMETRACE_DIR` | Cassette output directory |
-| `TIMETRACE_CASSETTE` | Specific cassette for replay |
-| `TIMETRACE_SAMPLE_RATE` | 0.0-1.0, fraction of requests to record |
-| `TIMETRACE_ERRORS_ONLY` | `true` to only record error responses |
+| `TIMETRACER_MODE` | `off`, `record`, or `replay` |
+| `TIMETRACER_DIR` | Cassette output directory |
+| `TIMETRACER_CASSETTE` | Specific cassette for replay |
+| `TIMETRACER_SAMPLE_RATE` | 0.0-1.0, fraction of requests to record |
+| `TIMETRACER_ERRORS_ONLY` | `true` to only record error responses |

@@ -30,7 +30,7 @@ python test_edge_cases.py
 
 ```bash
 # Record mode
-TIMETRACE_MODE=record python -m uvicorn app:app
+TIMETRACER_MODE=record python -m uvicorn app:app
 
 # Make requests
 curl http://localhost:8000/products

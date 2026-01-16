@@ -6,23 +6,24 @@ while keeping other dependencies (like databases) live.
 """
 
 import os
+
 import httpx
 from fastapi import FastAPI
 
 from timetracer.config import TraceConfig
-from timetracer.integrations.fastapi import timetracerMiddleware
+from timetracer.integrations.fastapi import TimeTraceMiddleware
 from timetracer.plugins.httpx_plugin import enable_httpx
 
 app = FastAPI(title="Hybrid Replay Example")
 
 # Configure timetrace with hybrid replay support
 config = TraceConfig(
-    mode=os.environ.get("TIMETRACE_MODE", "off"),
+    mode=os.environ.get("TIMETRACER_MODE", "off"),
     cassette_dir="./cassettes",
-    cassette_path=os.environ.get("TIMETRACE_CASSETTE"),
+    cassette_path=os.environ.get("TIMETRACER_CASSETTE"),
     # For hybrid replay: only mock HTTP, keep DB live
-    mock_plugins=os.environ.get("TIMETRACE_MOCK_PLUGINS", "").split(",") if os.environ.get("TIMETRACE_MOCK_PLUGINS") else [],
-    live_plugins=os.environ.get("TIMETRACE_LIVE_PLUGINS", "").split(",") if os.environ.get("TIMETRACE_LIVE_PLUGINS") else [],
+    mock_plugins=os.environ.get("TIMETRACER_MOCK_PLUGINS", "").split(",") if os.environ.get("TIMETRACER_MOCK_PLUGINS") else [],
+    live_plugins=os.environ.get("TIMETRACER_LIVE_PLUGINS", "").split(",") if os.environ.get("TIMETRACER_LIVE_PLUGINS") else [],
 )
 
 # Add middleware
@@ -47,7 +48,7 @@ async def checkout(payload: dict):
     """
     amount = payload.get("amount", 0)
     currency = payload.get("currency", "usd")
-    
+
     # External API call - will be mocked in replay mode
     async with httpx.AsyncClient() as client:
         # In real scenario, this would call Stripe
@@ -62,7 +63,7 @@ async def checkout(payload: dict):
             headers={"Authorization": "Bearer sk_test_xxxx"},
         )
         external_result = response.json()
-    
+
     # In real scenario, you'd store order in database here
     # This would be LIVE even during replay with mock_plugins=["http"]
     order = {
@@ -72,7 +73,7 @@ async def checkout(payload: dict):
         "status": "completed",
         "payment_provider": "stripe",
     }
-    
+
     return {
         "order": order,
         "payment_response": external_result.get("url", "captured"),

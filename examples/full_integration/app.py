@@ -11,19 +11,19 @@ A realistic API that exercises ALL Timetrace features:
 - Different content types
 """
 
+import sys
+from pathlib import Path
+
+import httpx
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import PlainTextResponse, Response
 from sqlalchemy import create_engine, text
-import httpx
-import json
-import sys
-from pathlib import Path
 
 # Add timetrace to path if running locally
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from timetracer.config import TraceConfig
-from timetracer.integrations.fastapi import timetracerMiddleware
+from timetracer.integrations.fastapi import TimeTraceMiddleware
 from timetracer.plugins import enable_httpx
 
 # Create app
@@ -96,10 +96,10 @@ def get_product(product_id: int):
             {"id": product_id}
         )
         row = result.fetchone()
-    
+
     if not row:
         raise HTTPException(status_code=404, detail="Product not found")
-    
+
     return {"id": row[0], "name": row[1], "price": row[2]}
 
 
@@ -113,7 +113,7 @@ def create_product(name: str = Query(...), price: float = Query(...)):
         )
         conn.commit()
         product_id = result.lastrowid
-    
+
     return {"id": product_id, "name": name, "price": price}
 
 
@@ -168,7 +168,7 @@ async def multiple_external_calls():
         r1 = await client.get("https://httpbin.org/get", timeout=10.0)
         r2 = await client.get("https://httpbin.org/headers", timeout=10.0)
         r3 = await client.get("https://httpbin.org/ip", timeout=10.0)
-    
+
     return {
         "calls": 3,
         "ip": r3.json().get("origin", "unknown"),

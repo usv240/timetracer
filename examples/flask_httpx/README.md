@@ -11,7 +11,7 @@ pip install timetrace[flask,httpx]
 ## Run in Record Mode
 
 ```bash
-TIMETRACE_MODE=record TIMETRACE_DIR=./cassettes python app.py
+TIMETRACER_MODE=record TIMETRACER_DIR=./cassettes python app.py
 ```
 
 Then make requests:
@@ -25,7 +25,7 @@ Cassettes will be saved to `./cassettes/`.
 ## Run in Replay Mode
 
 ```bash
-TIMETRACE_MODE=replay TIMETRACE_CASSETTE=./cassettes/.../GET__weather.json python app.py
+TIMETRACER_MODE=replay TIMETRACER_CASSETTE=./cassettes/.../GET__weather.json python app.py
 ```
 
 The httpx calls will be mocked from the cassette - no network requests made!

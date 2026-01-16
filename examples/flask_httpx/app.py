@@ -7,11 +7,11 @@ Demonstrates:
 - Replay with mocked dependencies
 """
 
-from flask import Flask, jsonify
 import httpx
+from flask import Flask, jsonify
 
-from timetracer.integrations.flask import init_app
 from timetracer.config import TraceConfig
+from timetracer.integrations.flask import init_app
 from timetracer.plugins import enable_httpx
 
 # Create Flask app
@@ -42,10 +42,10 @@ def get_weather(city: str):
     # and mocked in replay mode
     with httpx.Client() as client:
         response = client.get(
-            f"https://httpbin.org/get",
+            "https://httpbin.org/get",
             params={"city": city}
         )
-    
+
     return jsonify({
         "city": city,
         "external_response": response.json(),
@@ -65,7 +65,7 @@ def checkout():
             "https://httpbin.org/post",
             json={"amount": 99.99, "currency": "USD"}
         )
-    
+
     return jsonify({
         "status": "success",
         "payment_id": "pay_123",

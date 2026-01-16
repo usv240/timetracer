@@ -8,17 +8,16 @@ This app shows how to:
 4. Replay cassettes for testing
 
 Run in record mode:
-    TIMETRACE_MODE=record uvicorn app:app --reload
+    TIMETRACER_MODE=record uvicorn app:app --reload
 
 Run in replay mode:
-    TIMETRACE_MODE=replay TIMETRACE_CASSETTE=./cassettes/<file>.json uvicorn app:app
+    TIMETRACER_MODE=replay TIMETRACER_CASSETTE=./cassettes/<file>.json uvicorn app:app
 """
 
-from fastapi import FastAPI
 import httpx
+from fastapi import FastAPI
 
 from timetracer.config import TraceConfig
-from timetracer.integrations.fastapi import timetracerMiddleware
 from timetracer.plugins import enable_httpx
 
 # Create FastAPI app
@@ -59,7 +58,7 @@ async def checkout():
             timeout=10.0,
         )
         external_data = response.json()
-    
+
     return {
         "status": "checkout_complete",
         "external_data": external_data,
@@ -79,7 +78,7 @@ async def get_user(user_id: str):
             timeout=10.0,
         )
         data = response.json()
-    
+
     return {
         "user_id": user_id,
         "data": data,
@@ -100,14 +99,14 @@ async def process_payment():
             json={"action": "validate", "amount": 99.99},
             timeout=10.0,
         )
-        
+
         # Call 2: Process payment
         process_response = await client.post(
             "https://httpbin.org/post",
             json={"action": "process", "validated": True},
             timeout=10.0,
         )
-    
+
     return {
         "status": "payment_processed",
         "validation": validate_response.json(),

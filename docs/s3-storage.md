@@ -14,10 +14,10 @@ pip install timetrace[s3]
 
 | Variable | Description |
 |----------|-------------|
-| `TIMETRACE_S3_BUCKET` | S3 bucket name (required) |
-| `TIMETRACE_S3_PREFIX` | Key prefix (default: `cassettes`) |
-| `TIMETRACE_S3_REGION` | AWS region |
-| `TIMETRACE_S3_ENDPOINT` | Custom endpoint (MinIO, LocalStack) |
+| `TIMETRACER_S3_BUCKET` | S3 bucket name (required) |
+| `TIMETRACER_S3_PREFIX` | Key prefix (default: `cassettes`) |
+| `TIMETRACER_S3_REGION` | AWS region |
+| `TIMETRACER_S3_ENDPOINT` | Custom endpoint (MinIO, LocalStack) |
 | `AWS_ACCESS_KEY_ID` | AWS access key |
 | `AWS_SECRET_ACCESS_KEY` | AWS secret key |
 
@@ -104,7 +104,7 @@ config = S3Config(
 
 Or via environment:
 ```bash
-export TIMETRACE_S3_ENDPOINT=http://localhost:9000
+export TIMETRACER_S3_ENDPOINT=http://localhost:9000
 export AWS_ACCESS_KEY_ID=minioadmin
 export AWS_SECRET_ACCESS_KEY=minioadmin
 ```

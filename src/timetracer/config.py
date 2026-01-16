@@ -134,7 +134,7 @@ class TraceConfig:
         """
         Create configuration from environment variables.
 
-        All TIMETRACE_* environment variables are read and used.
+        All TIMETRACER_* environment variables are read and used.
         Missing variables use defaults.
         """
         kwargs: dict = {}
@@ -162,7 +162,7 @@ class TraceConfig:
             try:
                 kwargs["sample_rate"] = float(sample_rate)
             except ValueError:
-                raise ConfigurationError(f"Invalid TIMETRACE_SAMPLE_RATE: {sample_rate}")
+                raise ConfigurationError(f"Invalid TIMETRACER_SAMPLE_RATE: {sample_rate}")
         if errors_only := os.environ.get(EnvVars.ERRORS_ONLY):
             kwargs["errors_only"] = _parse_bool(errors_only)
         if exclude_paths := os.environ.get(EnvVars.EXCLUDE_PATHS):
@@ -173,7 +173,7 @@ class TraceConfig:
             try:
                 kwargs["max_body_kb"] = int(max_body)
             except ValueError:
-                raise ConfigurationError(f"Invalid TIMETRACE_MAX_BODY_KB: {max_body}")
+                raise ConfigurationError(f"Invalid TIMETRACER_MAX_BODY_KB: {max_body}")
         if store_req := os.environ.get(EnvVars.STORE_REQ_BODY):
             kwargs["store_request_body"] = store_req
         if store_res := os.environ.get(EnvVars.STORE_RES_BODY):

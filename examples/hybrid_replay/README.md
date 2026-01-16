@@ -25,7 +25,7 @@ pip install -e ../../  # Install timetrace from source
 ### 1. Record Mode (captures the Stripe call)
 
 ```bash
-TIMETRACE_MODE=record python app.py
+TIMETRACER_MODE=record python app.py
 ```
 
 Make a request:
@@ -38,9 +38,9 @@ curl -X POST http://localhost:8000/checkout \
 ### 2. Replay Mode (Stripe mocked, DB live)
 
 ```bash
-TIMETRACE_MODE=replay \
-TIMETRACE_CASSETTE=./cassettes/POST__checkout__*.json \
-TIMETRACE_MOCK_PLUGINS=http \
+TIMETRACER_MODE=replay \
+TIMETRACER_CASSETTE=./cassettes/POST__checkout__*.json \
+TIMETRACER_MOCK_PLUGINS=http \
 python app.py
 ```
 

@@ -32,22 +32,22 @@ class S3Config:
         Load S3 configuration from environment variables.
 
         Environment variables:
-            TIMETRACE_S3_BUCKET: S3 bucket name (required)
-            TIMETRACE_S3_PREFIX: Key prefix (default: "cassettes")
-            TIMETRACE_S3_REGION: AWS region
-            TIMETRACE_S3_ENDPOINT: Custom endpoint URL (for MinIO, etc.)
+            TIMETRACER_S3_BUCKET: S3 bucket name (required)
+            TIMETRACER_S3_PREFIX: Key prefix (default: "cassettes")
+            TIMETRACER_S3_REGION: AWS region
+            TIMETRACER_S3_ENDPOINT: Custom endpoint URL (for MinIO, etc.)
             AWS_ACCESS_KEY_ID: AWS access key
             AWS_SECRET_ACCESS_KEY: AWS secret key
         """
-        bucket = os.environ.get("timetracer_S3_BUCKET")
+        bucket = os.environ.get("TIMETRACER_S3_BUCKET")
         if not bucket:
-            raise ValueError("timetracer_S3_BUCKET environment variable is required")
+            raise ValueError("TIMETRACER_S3_BUCKET environment variable is required")
 
         return cls(
             bucket=bucket,
-            prefix=os.environ.get("timetracer_S3_PREFIX", "cassettes"),
-            region=os.environ.get("timetracer_S3_REGION") or os.environ.get("AWS_REGION"),
-            endpoint_url=os.environ.get("timetracer_S3_ENDPOINT"),
+            prefix=os.environ.get("TIMETRACER_S3_PREFIX", "cassettes"),
+            region=os.environ.get("TIMETRACER_S3_REGION") or os.environ.get("AWS_REGION"),
+            endpoint_url=os.environ.get("TIMETRACER_S3_ENDPOINT"),
             access_key=os.environ.get("AWS_ACCESS_KEY_ID"),
             secret_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
         )

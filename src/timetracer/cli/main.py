@@ -123,7 +123,7 @@ def main(args: list[str] | None = None) -> int:
     # S3 upload
     s3_upload = s3_subparsers.add_parser("upload", help="Upload cassettes to S3")
     s3_upload.add_argument("path", help="Local cassette file or directory")
-    s3_upload.add_argument("--bucket", "-b", help="S3 bucket (or TIMETRACE_S3_BUCKET)")
+    s3_upload.add_argument("--bucket", "-b", help="S3 bucket (or TIMETRACER_S3_BUCKET)")
     s3_upload.add_argument("--prefix", "-p", default="cassettes", help="S3 prefix")
 
     # S3 download
@@ -452,13 +452,13 @@ def _cmd_s3(parsed) -> int:
     try:
         from timetracer.storage.s3 import S3Config, S3Store
     except ImportError:
-        print("boto3 is required for S3 storage. Install with: pip install timetrace[s3]", file=sys.stderr)
+        print("boto3 is required for S3 storage. Install with: pip install timetracer[s3]", file=sys.stderr)
         return 1
 
     # Get bucket from args or env
-    bucket = getattr(parsed, 'bucket', None) or os.environ.get("timetracer_S3_BUCKET")
+    bucket = getattr(parsed, 'bucket', None) or os.environ.get("TIMETRACER_S3_BUCKET")
     if not bucket:
-        print("S3 bucket required. Set --bucket or TIMETRACE_S3_BUCKET", file=sys.stderr)
+        print("S3 bucket required. Set --bucket or TIMETRACER_S3_BUCKET", file=sys.stderr)
         return 1
 
     prefix = getattr(parsed, 'prefix', 'cassettes')

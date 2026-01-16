@@ -55,10 +55,10 @@ init_app(app, config)
 
 ```bash
 # Record mode
-TIMETRACE_MODE=record python app.py
+TIMETRACER_MODE=record python app.py
 
 # Replay mode
-TIMETRACE_MODE=replay TIMETRACE_CASSETTE=./cassettes/POST__checkout__a91c.json python app.py
+TIMETRACER_MODE=replay TIMETRACER_CASSETTE=./cassettes/POST__checkout__a91c.json python app.py
 ```
 
 ## Features

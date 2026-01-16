@@ -1,109 +1,115 @@
-# Timetracer Quickstart
+# Timetracer Quick Start
 
-Get started with Timetracer in under 5 minutes.
+Get up and running in under 5 minutes.
 
 ## Installation
 
 ```bash
-pip install timetracer
+pip install timetracer[fastapi,httpx]
 ```
 
-For httpx capturing (recommended):
-```bash
-pip install timetracer[httpx]
-```
-
-For requests library support:
-```bash
-pip install timetracer requests
-```
-
-## Basic Usage with FastAPI
-
-### 1. Add the Middleware
+## FastAPI Setup
 
 ```python
 from fastapi import FastAPI
-from timetracer.integrations.fastapi import TimeTraceMiddleware
-from timetracer.config import TraceConfig
-from timetracer.plugins.httpx_plugin import enable_httpx
+from timetracer.integrations.fastapi import auto_setup
 
-app = FastAPI()
+app = auto_setup(FastAPI())
 
-# Configure timetracer
-config = TraceConfig(
-    mode="record",
-    cassette_dir="./cassettes",
-    capture=["http"],
-)
-
-# Add middleware
-app.add_middleware(TimeTraceMiddleware, config=config)
-
-# Enable httpx capturing
-enable_httpx()
+@app.get("/users/{user_id}")
+async def get_user(user_id: int):
+    import httpx
+    async with httpx.AsyncClient() as client:
+        return (await client.get(f"https://api.example.com/users/{user_id}")).json()
 ```
 
-### 2. Record Your First Request
-
-Run your app and make a request:
+## Flask Setup
 
 ```bash
-TIMETRACER_MODE=record uvicorn app:app --reload
-curl http://localhost:8000/your-endpoint
+pip install timetracer[flask,requests]
 ```
 
-You'll see output like:
-```
-TIMETRACER [OK] recorded GET /your-endpoint  id=a91c  status=200  total=412ms  deps=http.client:1
-  cassette: cassettes/2026-01-16/GET__your-endpoint__a91c.json
+```python
+from flask import Flask
+from timetracer.integrations.flask import auto_setup
+
+app = auto_setup(Flask(__name__))
 ```
 
-### 3. Replay with Mocked Dependencies
+---
+
+## Recording Requests
+
+Start your app in record mode:
+
+```bash
+TIMETRACER_MODE=record uvicorn app:app
+curl http://localhost:8000/users/123
+```
+
+You should see output similar to:
+
+```
+timetracer [OK] recorded GET /users/123  id=a91c  status=200  total=412ms  deps=http.client:1
+  cassette: ./cassettes/2026-01-16/GET__users_{user_id}__a91c.json
+```
+
+## Replaying Requests
+
+Start your app in replay mode with a cassette file:
 
 ```bash
 TIMETRACER_MODE=replay \
-TIMETRACER_CASSETTE=cassettes/2026-01-16/GET__your-endpoint__a91c.json \
-uvicorn app:app
+  TIMETRACER_CASSETTE=./cassettes/2026-01-16/GET__users_{user_id}__a91c.json \
+  uvicorn app:app
 ```
 
-Now all external HTTP calls are mocked from the recorded cassette.
+All external HTTP calls are now served from the recorded cassette.
 
-## Environment Variable Configuration
+---
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `TIMETRACER_MODE` | `off`, `record`, or `replay` | `off` |
-| `TIMETRACER_DIR` | Cassette storage directory | `./cassettes` |
-| `TIMETRACER_CASSETTE` | Specific cassette path (for replay) | - |
-| `TIMETRACER_SAMPLE_RATE` | Recording sample rate (0.0-1.0) | `1.0` |
-| `TIMETRACER_ERRORS_ONLY` | Only record error responses | `false` |
-| `TIMETRACER_EXCLUDE_PATHS` | Comma-separated paths to skip | `/health,/metrics` |
+## Manual Setup
+
+For more control over configuration:
+
+```python
+from fastapi import FastAPI
+from timetracer import TraceConfig
+from timetracer.integrations.fastapi import TimeTraceMiddleware
+from timetracer.plugins import enable_httpx, enable_redis
+
+app = FastAPI()
+app.add_middleware(TimeTraceMiddleware, config=TraceConfig.from_env())
+enable_httpx()
+enable_redis()
+```
+
+---
+
+## Environment Variables
+
+| Variable | Default |
+|----------|---------|
+| `TIMETRACER_MODE` | `off` |
+| `TIMETRACER_DIR` | `./cassettes` |
+| `TIMETRACER_CASSETTE` | — |
+| `TIMETRACER_SAMPLE_RATE` | `1.0` |
+| `TIMETRACER_ERRORS_ONLY` | `false` |
+
+---
 
 ## CLI Commands
 
-### List cassettes
 ```bash
-timetracer list --dir ./cassettes --limit 20
+timetracer list --dir ./cassettes
+timetracer show ./cassettes/GET__users.json --events
+timetracer timeline ./cassettes/GET__users.json --open
 ```
 
-### Show cassette details
-```bash
-timetracer show ./cassettes/2026-01-16/GET__checkout__a91c.json
-```
-
-### Generate HTML timeline
-```bash
-timetracer timeline ./cassettes/GET__checkout__a91c.json --open
-```
-
-### Diff two cassettes
-```bash
-timetracer diff --a cassette1.json --b cassette2.json
-```
+---
 
 ## Next Steps
 
-- Read [Configuration](configuration.md) for all options
-- Learn about [Plugins](plugins.md) and hybrid replay
-- Review [Security](security.md) for redaction settings
+- [Configuration Reference](configuration.md)
+- [Plugin Guide](plugins.md)
+- [Security Best Practices](security.md)

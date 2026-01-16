@@ -98,10 +98,10 @@ config = TraceConfig(
 
 ```bash
 # Mock only HTTP, keep everything else live
-TIMETRACE_MOCK_PLUGINS=http
+TIMETRACER_MOCK_PLUGINS=http
 
 # Keep DB and Redis live, mock everything else
-TIMETRACE_LIVE_PLUGINS=db,redis
+TIMETRACER_LIVE_PLUGINS=db,redis
 ```
 
 ### Use Cases

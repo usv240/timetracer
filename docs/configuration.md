@@ -57,26 +57,26 @@ Complete reference for all Timetrace configuration options.
 
 ## Environment Variables
 
-All options can be set via environment variables with the `TIMETRACE_` prefix:
+All options can be set via environment variables with the `TIMETRACER_` prefix:
 
 | Environment Variable | Config Option |
 |---------------------|---------------|
-| `TIMETRACE_MODE` | `mode` |
-| `TIMETRACE_SERVICE` | `service_name` |
-| `TIMETRACE_ENV` | `env` |
-| `TIMETRACE_DIR` | `cassette_dir` |
-| `TIMETRACE_CASSETTE` | `cassette_path` |
-| `TIMETRACE_CAPTURE` | `capture` (comma-separated) |
-| `TIMETRACE_SAMPLE_RATE` | `sample_rate` |
-| `TIMETRACE_ERRORS_ONLY` | `errors_only` |
-| `TIMETRACE_EXCLUDE_PATHS` | `exclude_paths` (comma-separated) |
-| `TIMETRACE_MAX_BODY_KB` | `max_body_kb` |
-| `TIMETRACE_STORE_REQ_BODY` | `store_request_body` |
-| `TIMETRACE_STORE_RES_BODY` | `store_response_body` |
-| `TIMETRACE_STRICT_REPLAY` | `strict_replay` |
-| `TIMETRACE_MOCK_PLUGINS` | `mock_plugins` (comma-separated) |
-| `TIMETRACE_LIVE_PLUGINS` | `live_plugins` (comma-separated) |
-| `TIMETRACE_LOG_LEVEL` | `log_level` |
+| `TIMETRACER_MODE` | `mode` |
+| `TIMETRACER_SERVICE` | `service_name` |
+| `TIMETRACER_ENV` | `env` |
+| `TIMETRACER_DIR` | `cassette_dir` |
+| `TIMETRACER_CASSETTE` | `cassette_path` |
+| `TIMETRACER_CAPTURE` | `capture` (comma-separated) |
+| `TIMETRACER_SAMPLE_RATE` | `sample_rate` |
+| `TIMETRACER_ERRORS_ONLY` | `errors_only` |
+| `TIMETRACER_EXCLUDE_PATHS` | `exclude_paths` (comma-separated) |
+| `TIMETRACER_MAX_BODY_KB` | `max_body_kb` |
+| `TIMETRACER_STORE_REQ_BODY` | `store_request_body` |
+| `TIMETRACER_STORE_RES_BODY` | `store_response_body` |
+| `TIMETRACER_STRICT_REPLAY` | `strict_replay` |
+| `TIMETRACER_MOCK_PLUGINS` | `mock_plugins` (comma-separated) |
+| `TIMETRACER_LIVE_PLUGINS` | `live_plugins` (comma-separated) |
+| `TIMETRACER_LOG_LEVEL` | `log_level` |
 
 ## Configuration Priority
 
@@ -106,10 +106,10 @@ config = TraceConfig(
 ### Environment-Only Configuration
 
 ```bash
-export TIMETRACE_MODE=record
-export TIMETRACE_DIR=./cassettes
-export TIMETRACE_SAMPLE_RATE=0.5
-export TIMETRACE_ERRORS_ONLY=true
+export TIMETRACER_MODE=record
+export TIMETRACER_DIR=./cassettes
+export TIMETRACER_SAMPLE_RATE=0.5
+export TIMETRACER_ERRORS_ONLY=true
 ```
 
 ```python
@@ -126,7 +126,7 @@ from timetrace.config import TraceConfig
 config = TraceConfig(
     service_name="my-api",
     cassette_dir="./cassettes",
-).with_env_overrides()  # TIMETRACE_MODE env var will override mode
+).with_env_overrides()  # TIMETRACER_MODE env var will override mode
 ```
 
 ### Hybrid Replay Mode
@@ -144,7 +144,7 @@ config = TraceConfig(
 
 Or via environment:
 ```bash
-TIMETRACE_MODE=replay
-TIMETRACE_CASSETTE=./cassettes/checkout.json
-TIMETRACE_LIVE_PLUGINS=db,redis  # Keep DB and Redis live
+TIMETRACER_MODE=replay
+TIMETRACER_CASSETTE=./cassettes/checkout.json
+TIMETRACER_LIVE_PLUGINS=db,redis  # Keep DB and Redis live
 ```

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "timetracer"
-version = "1.0.0"
+version = "1.0.2"
 description = "Time-travel debugging for FastAPI and Flask - record API cassettes, replay with mocked dependencies"
 readme = "README.md"
 license = {text = "MIT"}
