@@ -1,0 +1,10 @@
+include LICENSE
+include README.md
+include CONTRIBUTING.md
+include SECURITY.md
+include CODE_OF_CONDUCT.md
+recursive-include docs *.md
+recursive-exclude examples *
+recursive-exclude tests *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[cod]

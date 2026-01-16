@@ -1,0 +1,6 @@
+# Requirements for the example app
+# These are also available via: pip install -e "../../[all]"
+
+fastapi>=0.100.0
+httpx>=0.24.0
+uvicorn>=0.20.0

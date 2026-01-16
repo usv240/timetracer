@@ -1,0 +1,87 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "timetrace"
+version = "1.0.0"
+description = "Time-travel debugging for FastAPI - record API cassettes, replay with mocked dependencies"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Timetrace Contributors"}
+]
+keywords = ["fastapi", "flask", "debugging", "testing", "api", "replay", "mocking", "cassette"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: FastAPI",
+    "Framework :: Flask",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Debuggers",
+]
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+fastapi = [
+    "fastapi>=0.100.0",
+    "starlette>=0.27.0",
+]
+flask = [
+    "flask>=2.0.0",
+]
+httpx = [
+    "httpx>=0.24.0",
+]
+requests = [
+    "requests>=2.28.0",
+]
+sqlalchemy = [
+    "sqlalchemy>=2.0.0",
+]
+redis = [
+    "redis>=4.0.0",
+]
+s3 = [
+    "boto3>=1.26.0",
+]
+all = [
+    "timetrace[fastapi,flask,httpx,requests,sqlalchemy,redis,s3]",
+]
+dev = [
+    "timetrace[all]",
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "uvicorn>=0.20.0",
+    "ruff>=0.1.0",
+    "fakeredis>=2.0.0",
+]
+
+[project.scripts]
+timetrace = "timetrace.cli.main:main"
+
+[project.urls]
+Homepage = "https://github.com/timetrace/timetrace"
+Documentation = "https://github.com/timetrace/timetrace#readme"
+Repository = "https://github.com/timetrace/timetrace"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]
