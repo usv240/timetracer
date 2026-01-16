@@ -25,6 +25,39 @@ Timetracer captures real API requests into portable **cassettes** and replays th
 
 ---
 
+## How It Works
+
+Timetracer acts as middleware that intercepts your app's external calls:
+
+```
+                      RECORD MODE
+┌──────────┐      ┌──────────────┐      ┌──────────────┐
+│  Client  │ ───► │   Your App   │ ───► │   External   │
+│  (curl)  │      │ + Timetracer │      │   APIs/DB    │
+└──────────┘      └──────────────┘      └──────────────┘
+                         │
+                         ▼
+                   ┌───────────┐
+                   │  Cassette │  (saves everything)
+                   │   .json   │
+                   └───────────┘
+
+
+                      REPLAY MODE
+┌──────────┐      ┌──────────────┐       ╳ External APIs
+│  Client  │ ───► │   Your App   │       ╳ (not called)
+│  (curl)  │      │ + Timetracer │
+└──────────┘      └──────────────┘
+                         ▲
+                         │
+                   ┌───────────┐
+                   │  Cassette │  (replays from here)
+                   │   .json   │
+                   └───────────┘
+```
+
+---
+
 ## Installation
 
 ```bash
