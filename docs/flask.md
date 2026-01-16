@@ -1,11 +1,11 @@
 # Flask Integration
 
-Use Timetrace with Flask applications.
+Use timetracer with Flask applications.
 
 ## Installation
 
 ```bash
-pip install timetrace[flask]
+pip install timetracer[flask]
 ```
 
 ## Usage
@@ -14,20 +14,20 @@ pip install timetrace[flask]
 
 ```python
 from flask import Flask
-from timetrace.integrations.flask import TimeTraceMiddleware
-from timetrace.config import TraceConfig
-from timetrace.plugins import enable_httpx
+from timetracer.integrations.flask import timetracerMiddleware
+from timetracer.config import TraceConfig
+from timetracer.plugins import enable_httpx
 
 app = Flask(__name__)
 
-# Configure timetrace
+# Configure timetracer
 config = TraceConfig(
     mode="record",
     cassette_dir="./cassettes",
 )
 
 # Wrap WSGI app
-app.wsgi_app = TimeTraceMiddleware(app.wsgi_app, config=config)
+app.wsgi_app = timetracerMiddleware(app.wsgi_app, config=config)
 
 # Enable plugins
 enable_httpx()
@@ -42,8 +42,8 @@ def checkout():
 
 ```python
 from flask import Flask
-from timetrace.integrations.flask import init_app
-from timetrace.config import TraceConfig
+from timetracer.integrations.flask import init_app
+from timetracer.config import TraceConfig
 
 app = Flask(__name__)
 
@@ -63,7 +63,7 @@ TIMETRACER_MODE=replay TIMETRACER_CASSETTE=./cassettes/POST__checkout__a91c.json
 
 ## Features
 
-All standard Timetrace features work with Flask:
+All standard timetracer features work with Flask:
 
 - Request/response capture
 - httpx/requests plugin support
@@ -75,6 +75,6 @@ All standard Timetrace features work with Flask:
 ## Example Output
 
 ```
-TIMETRACE [OK] recorded POST /checkout  id=b42f  status=200  total=312ms  deps=http.client:2
+timetracer [OK] recorded POST /checkout  id=b42f  status=200  total=312ms  deps=http.client:2
   cassette: cassettes/2026-01-15/POST__checkout__b42f.json
 ```

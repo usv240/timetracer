@@ -1,6 +1,6 @@
-# Timetrace Configuration Reference
+# Timetracer Configuration Reference
 
-Complete reference for all Timetrace configuration options.
+Complete reference for all Timetracer configuration options.
 
 ## TraceConfig Options
 
@@ -89,8 +89,8 @@ All options can be set via environment variables with the `TIMETRACER_` prefix:
 ### Programmatic Configuration
 
 ```python
-from timetrace.config import TraceConfig
-from timetrace.constants import TraceMode, CapturePolicy
+from timetracer.config import TraceConfig
+from timetracer.constants import TraceMode, CapturePolicy
 
 config = TraceConfig(
     mode=TraceMode.RECORD,
@@ -113,14 +113,14 @@ export TIMETRACER_ERRORS_ONLY=true
 ```
 
 ```python
-from timetrace.config import TraceConfig
+from timetracer.config import TraceConfig
 config = TraceConfig.from_env()
 ```
 
 ### Hybrid Configuration
 
 ```python
-from timetrace.config import TraceConfig
+from timetracer.config import TraceConfig
 
 # Set base config in code, allow env overrides
 config = TraceConfig(

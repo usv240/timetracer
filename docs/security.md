@@ -1,10 +1,10 @@
-# Timetrace Security Guide
+# timetracer Security Guide
 
-Best practices for secure usage of Timetrace cassettes.
+Best practices for secure usage of timetracer cassettes.
 
 ## Default Redaction
 
-Timetrace automatically redacts sensitive data to prevent accidental exposure.
+timetracer automatically redacts sensitive data to prevent accidental exposure.
 
 ### Sensitive Headers (Always Removed)
 
@@ -49,8 +49,8 @@ For outbound HTTP calls, only these headers are captured:
 Control when body data is stored:
 
 ```python
-from timetrace.config import TraceConfig
-from timetrace.constants import CapturePolicy
+from timetracer.config import TraceConfig
+from timetracer.constants import CapturePolicy
 
 config = TraceConfig(
     # Only store bodies on errors
@@ -92,7 +92,7 @@ config = TraceConfig(
 Always review cassettes before committing to version control:
 
 ```bash
-timetrace show ./cassettes/path/to/cassette.json
+timetracer show ./cassettes/path/to/cassette.json
 ```
 
 ### 2. Use `.gitignore` for Local Cassettes
@@ -140,7 +140,7 @@ External API keys are automatically redacted in headers, but:
 Extend the default redaction rules:
 
 ```python
-from timetrace.constants import Redaction
+from timetracer.constants import Redaction
 
 # Add custom sensitive keys (for body redaction)
 CUSTOM_SENSITIVE_KEYS = Redaction.SENSITIVE_BODY_KEYS | {

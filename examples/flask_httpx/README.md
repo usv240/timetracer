@@ -1,17 +1,17 @@
 # Flask + httpx Example
 
-This example demonstrates Timetrace with Flask and httpx.
+This example demonstrates Timetracer with Flask and httpx.
 
 ## Setup
 
 ```bash
-pip install timetrace[flask,httpx]
+pip install Timetracer[flask,httpx]
 ```
 
 ## Run in Record Mode
 
 ```bash
-TIMETRACER_MODE=record TIMETRACER_DIR=./cassettes python app.py
+TimetracerR_MODE=record TimetracerR_DIR=./cassettes python app.py
 ```
 
 Then make requests:
@@ -25,7 +25,7 @@ Cassettes will be saved to `./cassettes/`.
 ## Run in Replay Mode
 
 ```bash
-TIMETRACER_MODE=replay TIMETRACER_CASSETTE=./cassettes/.../GET__weather.json python app.py
+TimetracerR_MODE=replay TimetracerR_CASSETTE=./cassettes/.../GET__weather.json python app.py
 ```
 
 The httpx calls will be mocked from the cassette - no network requests made!

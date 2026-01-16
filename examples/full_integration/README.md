@@ -1,6 +1,6 @@
 # Full Integration Example
 
-A comprehensive example and test suite that exercises ALL Timetrace features.
+A comprehensive example and test suite that exercises ALL Timetracer features.
 
 ## Files
 
@@ -30,7 +30,7 @@ python test_edge_cases.py
 
 ```bash
 # Record mode
-TIMETRACER_MODE=record python -m uvicorn app:app
+TimetracerR_MODE=record python -m uvicorn app:app
 
 # Make requests
 curl http://localhost:8000/products

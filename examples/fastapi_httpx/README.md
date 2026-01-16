@@ -1,11 +1,11 @@
-# Timetrace FastAPI + httpx Example
+# Timetracer FastAPI + httpx Example
 
-This example demonstrates using Timetrace to record and replay API calls.
+This example demonstrates using Timetracer to record and replay API calls.
 
 ## Setup
 
 ```bash
-# From the timetrace root directory
+# From the Timetracer root directory
 cd examples/fastapi_httpx
 
 # Create virtual environment
@@ -24,10 +24,10 @@ Record real API calls to cassettes:
 
 ```bash
 # Start server in record mode
-$env:TIMETRACER_MODE="record"; uvicorn app:app --reload
+$env:TimetracerR_MODE="record"; uvicorn app:app --reload
 
 # Or on Unix:
-# TIMETRACER_MODE=record uvicorn app:app --reload
+# TimetracerR_MODE=record uvicorn app:app --reload
 ```
 
 Make some requests:
@@ -54,11 +54,11 @@ Replay using recorded cassettes (no network calls):
 
 ```bash
 # Find a cassette
-timetrace list --dir ./cassettes
+Timetracer list --dir ./cassettes
 
 # Start server in replay mode
-$env:TIMETRACER_MODE="replay"
-$env:TIMETRACER_CASSETTE="./cassettes/2026-01-15/POST__checkout__abcd1234.json"
+$env:TimetracerR_MODE="replay"
+$env:TimetracerR_CASSETTE="./cassettes/2026-01-15/POST__checkout__abcd1234.json"
 uvicorn app:app --reload
 
 # Make the same request - external calls are mocked!
@@ -71,21 +71,21 @@ Use the CLI to inspect recorded cassettes:
 
 ```bash
 # List recent cassettes
-timetrace list --dir ./cassettes
+Timetracer list --dir ./cassettes
 
 # Show cassette summary
-timetrace show ./cassettes/2026-01-15/POST__checkout__abcd1234.json
+Timetracer show ./cassettes/2026-01-15/POST__checkout__abcd1234.json
 
 # Show with event details
-timetrace show ./cassettes/2026-01-15/POST__checkout__abcd1234.json --events
+Timetracer show ./cassettes/2026-01-15/POST__checkout__abcd1234.json --events
 ```
 
 ## Environment Variables
 
 | Variable | Description |
 |----------|-------------|
-| `TIMETRACER_MODE` | `off`, `record`, or `replay` |
-| `TIMETRACER_DIR` | Cassette output directory |
-| `TIMETRACER_CASSETTE` | Specific cassette for replay |
-| `TIMETRACER_SAMPLE_RATE` | 0.0-1.0, fraction of requests to record |
-| `TIMETRACER_ERRORS_ONLY` | `true` to only record error responses |
+| `TimetracerR_MODE` | `off`, `record`, or `replay` |
+| `TimetracerR_DIR` | Cassette output directory |
+| `TimetracerR_CASSETTE` | Specific cassette for replay |
+| `TimetracerR_SAMPLE_RATE` | 0.0-1.0, fraction of requests to record |
+| `TimetracerR_ERRORS_ONLY` | `true` to only record error responses |

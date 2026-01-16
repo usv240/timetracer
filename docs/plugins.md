@@ -1,6 +1,6 @@
-# Timetrace Plugin System
+# timetracer Plugin System
 
-Learn how to use and create plugins for Timetrace.
+Learn how to use and create plugins for timetracer.
 
 ## Built-in Plugins
 
@@ -9,7 +9,7 @@ Learn how to use and create plugins for Timetrace.
 Captures and replays httpx HTTP client calls.
 
 ```python
-from timetrace.plugins.httpx_plugin import enable_httpx, disable_httpx
+from timetracer.plugins.httpx_plugin import enable_httpx, disable_httpx
 
 # Enable capturing
 enable_httpx()
@@ -27,7 +27,7 @@ disable_httpx()
 Captures and replays requests library calls.
 
 ```python
-from timetrace.plugins.requests_plugin import enable_requests, disable_requests
+from timetracer.plugins.requests_plugin import enable_requests, disable_requests
 
 enable_requests()
 
@@ -42,7 +42,7 @@ disable_requests()
 Captures database queries (SELECT, INSERT, UPDATE, DELETE).
 
 ```python
-from timetrace.plugins import enable_sqlalchemy
+from timetracer.plugins import enable_sqlalchemy
 from sqlalchemy import create_engine
 
 engine = create_engine("postgresql://...")
@@ -58,7 +58,7 @@ See [SQLAlchemy docs](sqlalchemy.md) for details.
 Captures Redis commands.
 
 ```python
-from timetrace.plugins import enable_redis
+from timetracer.plugins import enable_redis
 
 enable_redis()
 
@@ -69,7 +69,7 @@ redis_client.set("cache:key", "value")
 
 ## Hybrid Replay Mode
 
-One of Timetrace's most powerful features is **hybrid replay**, which allows you to:
+One of timetracer's most powerful features is **hybrid replay**, which allows you to:
 - Mock some dependencies while keeping others live
 - Test against real databases while mocking external APIs
 - Gradually add mocking to complex systems
@@ -77,7 +77,7 @@ One of Timetrace's most powerful features is **hybrid replay**, which allows you
 ### Configuration
 
 ```python
-from timetrace.config import TraceConfig
+from timetracer.config import TraceConfig
 
 # Option 1: Specify what to mock (everything else stays live)
 config = TraceConfig(
@@ -131,9 +131,9 @@ config = TraceConfig(
 Plugins intercept dependency calls during recording and replay.
 
 ```python
-from timetrace.context import get_current_session, has_active_session
-from timetrace.types import DependencyEvent, EventSignature, EventResult
-from timetrace.constants import EventType
+from timetracer.context import get_current_session, has_active_session
+from timetracer.types import DependencyEvent, EventSignature, EventResult
+from timetracer.constants import EventType
 
 def enable_my_plugin():
     """Enable your custom plugin."""
@@ -156,7 +156,7 @@ def _instrumented_function(*args, **kwargs):
         return _record_call(*args, **kwargs)
     elif session.is_replaying:
         # Check hybrid replay
-        from timetrace.session import ReplaySession
+        from timetracer.session import ReplaySession
         if isinstance(session, ReplaySession):
             if not session.should_mock_plugin("my_plugin"):
                 return _original_func(*args, **kwargs)

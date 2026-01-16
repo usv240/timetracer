@@ -5,7 +5,7 @@ Capture and replay SQLAlchemy database queries.
 ## Installation
 
 ```bash
-pip install timetrace[sqlalchemy]
+pip install timetracer[sqlalchemy]
 ```
 
 ## Usage
@@ -13,9 +13,9 @@ pip install timetrace[sqlalchemy]
 ```python
 from fastapi import FastAPI
 from sqlalchemy import create_engine
-from timetrace.config import TraceConfig
-from timetrace.integrations.fastapi import TimeTraceMiddleware
-from timetrace.plugins import enable_sqlalchemy
+from timetracer.config import TraceConfig
+from timetracer.integrations.fastapi import timetracerMiddleware
+from timetracer.plugins import enable_sqlalchemy
 
 # Create engine
 engine = create_engine("postgresql://user:pass@localhost/db")
@@ -28,12 +28,12 @@ enable_sqlalchemy()
 
 app = FastAPI()
 config = TraceConfig.from_env()
-app.add_middleware(TimeTraceMiddleware, config=config)
+app.add_middleware(timetracerMiddleware, config=config)
 ```
 
 ## What Gets Captured
 
-For each database query, Timetrace records:
+For each database query, timetracer records:
 
 | Field | Description |
 |-------|-------------|
