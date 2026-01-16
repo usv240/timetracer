@@ -1,5 +1,5 @@
 """
-Example FastAPI app demonstrating Timetrace.
+Example FastAPI app demonstrating timetracer.
 
 This app shows how to:
 1. Set up TimeTraceMiddleware
@@ -17,9 +17,9 @@ Run in replay mode:
 from fastapi import FastAPI
 import httpx
 
-from timetrace.config import TraceConfig
-from timetrace.integrations.fastapi import TimeTraceMiddleware
-from timetrace.plugins import enable_httpx
+from timetracer.config import TraceConfig
+from timetracer.integrations.fastapi import timetracerMiddleware
+from timetracer.plugins import enable_httpx
 
 # Create FastAPI app
 app = FastAPI(

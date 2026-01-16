@@ -1,14 +1,14 @@
-# Contributing to Timetrace
+# Contributing to Timetracer
 
-Thank you for your interest in contributing to Timetrace! This document provides guidelines for contributing.
+Thank you for your interest in contributing to Timetracer! This document provides guidelines for contributing.
 
 ## Getting Started
 
 ### 1. Fork and Clone
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/timetrace.git
-cd timetrace
+git clone https://github.com/usv240/timetracer.git
+cd timetracer
 ```
 
 ### 2. Install in Development Mode
@@ -27,7 +27,7 @@ This installs all dependencies including:
 
 ```bash
 # Check installation
-python -c "import timetrace; print(timetrace.__version__)"
+python -c "import timetracer; print(timetracer.__version__)"
 ```
 
 ## Development Workflow
@@ -60,7 +60,7 @@ ruff check src/
 ruff check src/ --fix
 
 # Check specific file
-ruff check src/timetrace/plugins/httpx_plugin.py
+ruff check src/timetracer/plugins/httpx_plugin.py
 ```
 
 ### Formatting
@@ -83,7 +83,7 @@ pytest tests/ -v
 python examples/fastapi_httpx/test_complete.py
 
 # 3. Verify imports
-python -c "from timetrace import TraceConfig, TraceMode"
+python -c "from timetracer import TraceConfig, TraceMode"
 ```
 
 ## Making Changes

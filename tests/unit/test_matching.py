@@ -1,13 +1,13 @@
 """Tests for signature matching."""
 
 import pytest
-from timetrace.replay.matching import (
+from timetracer.replay.matching import (
     normalize_url,
     normalize_query,
     signatures_match,
     create_signature_summary,
 )
-from timetrace.types import EventSignature
+from timetracer.types import EventSignature
 
 
 class TestNormalizeUrl:

@@ -5,10 +5,10 @@ import pytest
 import tempfile
 from pathlib import Path
 
-from timetrace.config import TraceConfig
-from timetrace.constants import TraceMode
-from timetrace.cassette import read_cassette
-from timetrace.cassette.io import _dict_to_cassette
+from timetracer.config import TraceConfig
+from timetracer.constants import TraceMode
+from timetracer.cassette import read_cassette
+from timetracer.cassette.io import _dict_to_cassette
 
 
 class TestCassetteIO:
@@ -88,9 +88,9 @@ class TestReplaySession:
     
     def test_cursor_management(self, sample_cassette_data):
         """Replay cursor should track consumed events."""
-        from timetrace.session import ReplaySession
-        from timetrace.cassette.io import _dict_to_cassette
-        from timetrace.constants import EventType
+        from timetracer.session import ReplaySession
+        from timetracer.cassette.io import _dict_to_cassette
+        from timetracer.constants import EventType
         
         cassette = _dict_to_cassette(sample_cassette_data)
         session = ReplaySession(
@@ -112,9 +112,9 @@ class TestReplaySession:
     
     def test_event_consumption(self, sample_cassette_data):
         """Events should be consumed in order."""
-        from timetrace.session import ReplaySession
-        from timetrace.cassette.io import _dict_to_cassette
-        from timetrace.constants import EventType
+        from timetracer.session import ReplaySession
+        from timetracer.cassette.io import _dict_to_cassette
+        from timetracer.constants import EventType
         
         cassette = _dict_to_cassette(sample_cassette_data)
         session = ReplaySession(

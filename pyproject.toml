@@ -3,13 +3,13 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "timetrace"
+name = "timetracer"
 version = "1.0.0"
-description = "Time-travel debugging for FastAPI - record API cassettes, replay with mocked dependencies"
+description = "Time-travel debugging for FastAPI and Flask - record API cassettes, replay with mocked dependencies"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "Timetrace Contributors"}
+    {name = "Timetracer Contributors"}
 ]
 keywords = ["fastapi", "flask", "debugging", "testing", "api", "replay", "mocking", "cassette"]
 classifiers = [
@@ -52,10 +52,10 @@ s3 = [
     "boto3>=1.26.0",
 ]
 all = [
-    "timetrace[fastapi,flask,httpx,requests,sqlalchemy,redis,s3]",
+    "timetracer[fastapi,flask,httpx,requests,sqlalchemy,redis,s3]",
 ]
 dev = [
-    "timetrace[all]",
+    "timetracer[all]",
     "pytest>=7.0.0",
     "pytest-asyncio>=0.21.0",
     "uvicorn>=0.20.0",
@@ -64,12 +64,12 @@ dev = [
 ]
 
 [project.scripts]
-timetrace = "timetrace.cli.main:main"
+timetracer = "timetracer.cli.main:main"
 
 [project.urls]
-Homepage = "https://github.com/timetrace/timetrace"
-Documentation = "https://github.com/timetrace/timetrace#readme"
-Repository = "https://github.com/timetrace/timetrace"
+Homepage = "https://github.com/usv240/timetracer"
+Documentation = "https://github.com/usv240/timetracer#readme"
+Repository = "https://github.com/usv240/timetracer"
 
 [tool.setuptools.packages.find]
 where = ["src"]

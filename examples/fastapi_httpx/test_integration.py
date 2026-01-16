@@ -1,5 +1,5 @@
 """
-Integration test script for Timetrace.
+Integration test script for timetracer.
 
 This script tests record and replay modes without needing a running server.
 Uses FastAPI TestClient for direct testing.
@@ -22,13 +22,13 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 import httpx
 
-from timetrace.config import TraceConfig, TraceMode
-from timetrace.integrations.fastapi import TimeTraceMiddleware
-from timetrace.plugins import enable_httpx, disable_httpx
+from timetracer.config import TraceConfig, TraceMode
+from timetracer.integrations.fastapi import timetracerMiddleware
+from timetracer.plugins import enable_httpx, disable_httpx
 
 
 def create_app(config: TraceConfig) -> FastAPI:
-    """Create a test FastAPI app with Timetrace."""
+    """Create a test FastAPI app with timetracer."""
     app = FastAPI()
     app.add_middleware(TimeTraceMiddleware, config=config)
     

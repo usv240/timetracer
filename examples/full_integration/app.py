@@ -22,9 +22,9 @@ from pathlib import Path
 # Add timetrace to path if running locally
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from timetrace.config import TraceConfig
-from timetrace.integrations.fastapi import TimeTraceMiddleware
-from timetrace.plugins import enable_httpx
+from timetracer.config import TraceConfig
+from timetracer.integrations.fastapi import timetracerMiddleware
+from timetracer.plugins import enable_httpx
 
 # Create app
 app = FastAPI(title="Full Integration Example")

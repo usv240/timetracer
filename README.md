@@ -1,17 +1,17 @@
-# Timetrace
+# Timetracer
 
 **Time-travel debugging for FastAPI and Flask** - Record API requests, replay with mocked dependencies.
 
-[![CI](https://github.com/timetrace/timetrace/actions/workflows/ci.yml/badge.svg)](https://github.com/timetrace/timetrace/actions)
+[![CI](https://github.com/usv240/timetracer/actions/workflows/ci.yml/badge.svg)](https://github.com/usv240/timetracer/actions)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PyPI](https://img.shields.io/pypi/v/timetrace.svg)](https://pypi.org/project/timetrace/)
+[![PyPI](https://img.shields.io/pypi/v/timetracer.svg)](https://pypi.org/project/timetracer/)
 
 ---
 
 ## What is it?
 
-Timetrace records real API request executions into portable **cassettes** and replays them locally by mocking dependency calls (HTTP, database, Redis).
+Timetracer records real API request executions into portable **cassettes** and replays them locally by mocking dependency calls (HTTP, database, Redis).
 
 *Record once. Replay anywhere. Debug faster.*
 
@@ -26,14 +26,14 @@ Timetrace records real API request executions into portable **cassettes** and re
 
 ```bash
 # Core + all plugins
-pip install timetrace[all]
+pip install timetracer[all]
 
 # Or just what you need
-pip install timetrace[fastapi,httpx]      # FastAPI + HTTP
-pip install timetrace[flask,httpx]        # Flask + HTTP
-pip install timetrace[sqlalchemy]         # Database
-pip install timetrace[redis]              # Redis
-pip install timetrace[s3]                 # S3 storage
+pip install timetracer[fastapi,httpx]      # FastAPI + HTTP
+pip install timetracer[flask,httpx]        # Flask + HTTP
+pip install timetracer[sqlalchemy]         # Database
+pip install timetracer[redis]              # Redis
+pip install timetracer[s3]                 # S3 storage
 ```
 
 ## Quickstart (3 Steps)
@@ -41,20 +41,20 @@ pip install timetrace[s3]                 # S3 storage
 ### Step 1: Install
 
 ```bash
-pip install timetrace[fastapi,httpx]
+pip install timetracer[fastapi,httpx]
 ```
 
 ### Step 2: Add 4 Lines to Your App
 
 ```python
 from fastapi import FastAPI
-from timetrace.config import TraceConfig
-from timetrace.integrations.fastapi import TimeTraceMiddleware
-from timetrace.plugins import enable_httpx
+from timetracer.config import TraceConfig
+from timetracer.integrations.fastapi import TimeTraceMiddleware
+from timetracer.plugins import enable_httpx
 
 app = FastAPI()
 
-# Add these 2 lines to enable Timetrace
+# Add these 2 lines to enable Timetracer
 config = TraceConfig.from_env()
 app.add_middleware(TimeTraceMiddleware, config=config)
 
@@ -72,16 +72,16 @@ async def checkout():
 
 ```bash
 # Record requests
-TIMETRACE_MODE=record uvicorn app:app
+TIMETRACER_MODE=record uvicorn app:app
 curl -X POST http://localhost:8000/checkout
 
 # Check cassettes
 ls ./cassettes/
-# Output: 2024-01-15/POST__checkout__abc123.json
+# Output: 2026-01-16/POST__checkout__abc123.json
 
 # Replay (mocked HTTP calls)
-TIMETRACE_MODE=replay \
-  TIMETRACE_CASSETTE=./cassettes/2024-01-15/POST__checkout__abc123.json \
+TIMETRACER_MODE=replay \
+  TIMETRACER_CASSETTE=./cassettes/2026-01-16/POST__checkout__abc123.json \
   uvicorn app:app
 ```
 
@@ -89,11 +89,11 @@ TIMETRACE_MODE=replay \
 
 ```
 # Recording
-TIMETRACE [OK] recorded POST /checkout  id=abc123  status=200  total=523ms  deps=http.client:1
-  cassette: ./cassettes/2024-01-15/POST__checkout__abc123.json
+TIMETRACER [OK] recorded POST /checkout  id=abc123  status=200  total=523ms  deps=http.client:1
+  cassette: ./cassettes/2026-01-16/POST__checkout__abc123.json
 
 # Replaying
-TIMETRACE replay POST /checkout  mocked=1  matched=OK  runtime=45ms  recorded=523ms
+TIMETRACER replay POST /checkout  mocked=1  matched=OK  runtime=45ms  recorded=523ms
 ```
 
 That's it! External HTTP calls are now mocked from the recorded cassette.
@@ -104,8 +104,8 @@ That's it! External HTTP calls are now mocked from the recorded cassette.
 
 ```python
 from flask import Flask
-from timetrace.integrations.flask import init_app
-from timetrace.config import TraceConfig
+from timetracer.integrations.flask import init_app
+from timetracer.config import TraceConfig
 
 app = Flask(__name__)
 init_app(app, TraceConfig.from_env())
@@ -137,41 +137,41 @@ init_app(app, TraceConfig.from_env())
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `TIMETRACE_MODE` | `off`, `record`, `replay` | `off` |
-| `TIMETRACE_DIR` | Cassette directory | `./cassettes` |
-| `TIMETRACE_CASSETTE` | Replay cassette path | - |
-| `TIMETRACE_SAMPLE_RATE` | Record fraction (0-1) | `1.0` |
-| `TIMETRACE_ERRORS_ONLY` | Only record errors | `false` |
-| `TIMETRACE_MOCK_PLUGINS` | Plugins to mock | all |
-| `TIMETRACE_LIVE_PLUGINS` | Plugins to keep live | none |
+| `TIMETRACER_MODE` | `off`, `record`, `replay` | `off` |
+| `TIMETRACER_DIR` | Cassette directory | `./cassettes` |
+| `TIMETRACER_CASSETTE` | Replay cassette path | - |
+| `TIMETRACER_SAMPLE_RATE` | Record fraction (0-1) | `1.0` |
+| `TIMETRACER_ERRORS_ONLY` | Only record errors | `false` |
+| `TIMETRACER_MOCK_PLUGINS` | Plugins to mock | all |
+| `TIMETRACER_LIVE_PLUGINS` | Plugins to keep live | none |
 
 ## CLI
 
 ```bash
 # List cassettes
-timetrace list --dir ./cassettes
+timetracer list --dir ./cassettes
 
 # Show cassette details
-timetrace show ./cassettes/.../POST__checkout.json --events
+timetracer show ./cassettes/.../POST__checkout.json --events
 
 # Diff two cassettes
-timetrace diff --a cassette1.json --b cassette2.json
+timetracer diff --a cassette1.json --b cassette2.json
 
 # Generate timeline
-timetrace timeline ./cassettes/POST__checkout.json --open
+timetracer timeline ./cassettes/POST__checkout.json --open
 
 # Search cassettes
-timetrace search --endpoint /checkout --method POST --errors
-timetrace index --dir ./cassettes
+timetracer search --endpoint /checkout --method POST --errors
+timetracer index --dir ./cassettes
 
 # S3 operations
-timetrace s3 upload ./cassettes/ -b my-bucket
-timetrace s3 sync up -d ./cassettes -b my-bucket
+timetracer s3 upload ./cassettes/ -b my-bucket
+timetracer s3 sync up -d ./cassettes -b my-bucket
 ```
 
 ## Security
 
-By default, Timetrace:
+By default, Timetracer:
 - Removes `Authorization`, `Cookie`, `Set-Cookie` headers
 - Masks sensitive body keys (`password`, `token`, etc.)
 - Captures bodies only on errors by default

@@ -1,7 +1,7 @@
 """Tests for hashing utilities."""
 
 import pytest
-from timetrace.utils.hashing import hash_body, hash_string, short_hash
+from timetracer.utils.hashing import hash_body, hash_string, short_hash
 
 
 class TestHashBody:

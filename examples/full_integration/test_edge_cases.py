@@ -25,10 +25,10 @@ from fastapi.testclient import TestClient
 from fastapi.responses import Response
 import httpx
 
-from timetrace.config import TraceConfig, TraceMode
-from timetrace.constants import CapturePolicy
-from timetrace.integrations.fastapi import TimeTraceMiddleware
-from timetrace.plugins import enable_httpx, disable_httpx
+from timetracer.config import TraceConfig, TraceMode
+from timetracer.constants import CapturePolicy
+from timetracer.integrations.fastapi import timetracerMiddleware
+from timetracer.plugins import enable_httpx, disable_httpx
 
 # Track test results
 RESULTS = []

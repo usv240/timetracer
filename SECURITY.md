@@ -23,11 +23,11 @@ Please include the following information:
 - Proof-of-concept or exploit code (if possible)
 - Impact of the issue
 
-## Security Measures in Timetrace
+## Security Measures in Timetracer
 
 ### Sensitive Data Handling
 
-Timetrace implements multiple layers of protection:
+Timetracer implements multiple layers of protection:
 
 1. **Header Redaction (Default)**
    - `Authorization` - Always removed
@@ -49,7 +49,7 @@ Timetrace implements multiple layers of protection:
 
 ### Best Practices
 
-When using Timetrace:
+When using Timetracer:
 
 1. **Never commit cassettes** with production data to version control
 2. **Add `cassettes/` to `.gitignore`**
@@ -60,7 +60,7 @@ When using Timetrace:
 ### Configuration
 
 ```python
-from timetrace.config import TraceConfig
+from timetracer.config import TraceConfig
 
 config = TraceConfig(
     # Only record on errors

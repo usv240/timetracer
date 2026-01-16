@@ -59,7 +59,7 @@ jobs:
     
     environment:
       name: pypi
-      url: https://pypi.org/p/timetrace
+      url: https://pypi.org/p/timetracer
     
     steps:
       - uses: actions/checkout@v4

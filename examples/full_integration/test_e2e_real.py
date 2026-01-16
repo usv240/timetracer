@@ -222,7 +222,7 @@ def test_cli_tools():
     try:
         # timetrace list
         result = subprocess.run(
-            [sys.executable, "-m", "timetrace.cli.main", "list", "--dir", str(CASSETTE_DIR)],
+            [sys.executable, "-m", "timetracer.cli.main", "list", "--dir", str(CASSETTE_DIR)],
             capture_output=True,
             text=True,
             cwd=str(Path(__file__).parent.parent.parent)
@@ -231,7 +231,7 @@ def test_cli_tools():
         
         # timetrace show
         result = subprocess.run(
-            [sys.executable, "-m", "timetrace.cli.main", "show", str(cassettes[0])],
+            [sys.executable, "-m", "timetracer.cli.main", "show", str(cassettes[0])],
             capture_output=True,
             text=True,
             cwd=str(Path(__file__).parent.parent.parent)
@@ -240,7 +240,7 @@ def test_cli_tools():
         
         # timetrace search
         result = subprocess.run(
-            [sys.executable, "-m", "timetrace.cli.main", "search", "--dir", str(CASSETTE_DIR), "--method", "GET"],
+            [sys.executable, "-m", "timetracer.cli.main", "search", "--dir", str(CASSETTE_DIR), "--method", "GET"],
             capture_output=True,
             text=True,
             cwd=str(Path(__file__).parent.parent.parent)

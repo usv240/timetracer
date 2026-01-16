@@ -9,9 +9,9 @@ import os
 import httpx
 from fastapi import FastAPI
 
-from timetrace.config import TraceConfig
-from timetrace.integrations.fastapi import TimeTraceMiddleware
-from timetrace.plugins.httpx_plugin import enable_httpx
+from timetracer.config import TraceConfig
+from timetracer.integrations.fastapi import timetracerMiddleware
+from timetracer.plugins.httpx_plugin import enable_httpx
 
 app = FastAPI(title="Hybrid Replay Example")
 

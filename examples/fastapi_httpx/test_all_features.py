@@ -1,5 +1,5 @@
 """
-Comprehensive End-to-End Test for Timetrace.
+Comprehensive End-to-End Test for timetracer.
 
 Tests ALL tracked features:
 - httpx HTTP calls
@@ -30,9 +30,9 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 import httpx
 
-from timetrace.config import TraceConfig, TraceMode
-from timetrace.integrations.fastapi import TimeTraceMiddleware
-from timetrace.plugins import enable_httpx, disable_httpx
+from timetracer.config import TraceConfig, TraceMode
+from timetracer.integrations.fastapi import timetracerMiddleware
+from timetracer.plugins import enable_httpx, disable_httpx
 
 # Track test results
 RESULTS = []

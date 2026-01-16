@@ -1,5 +1,5 @@
 """
-COMPLETE End-to-End Test Suite for Timetrace.
+COMPLETE End-to-End Test Suite for timetracer.
 
 Tests ALL features including:
 - httpx HTTP calls
@@ -30,9 +30,9 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 import httpx
 
-from timetrace.config import TraceConfig, TraceMode
-from timetrace.integrations.fastapi import TimeTraceMiddleware
-from timetrace.plugins import enable_httpx, disable_httpx
+from timetracer.config import TraceConfig, TraceMode
+from timetracer.integrations.fastapi import timetracerMiddleware
+from timetracer.plugins import enable_httpx, disable_httpx
 
 # Track test results
 RESULTS = []
@@ -261,7 +261,7 @@ def test_requests_plugin():
     
     try:
         import requests as req_lib
-        from timetrace.plugins import enable_requests, disable_requests
+        from timetracer.plugins import enable_requests, disable_requests
         
         cassette_dir = tempfile.mkdtemp(prefix="tt_requests_")
         
@@ -310,7 +310,7 @@ def test_sqlalchemy_plugin():
     
     try:
         from sqlalchemy import create_engine, text
-        from timetrace.plugins import enable_sqlalchemy, disable_sqlalchemy
+        from timetracer.plugins import enable_sqlalchemy, disable_sqlalchemy
         
         cassette_dir = tempfile.mkdtemp(prefix="tt_sql_")
         db_path = Path(cassette_dir) / "test.db"
@@ -373,7 +373,7 @@ def test_redis_plugin():
     
     try:
         import fakeredis
-        from timetrace.plugins import enable_redis, disable_redis
+        from timetracer.plugins import enable_redis, disable_redis
         
         cassette_dir = tempfile.mkdtemp(prefix="tt_redis_")
         
@@ -435,7 +435,7 @@ def test_cli_list():
     
     try:
         result = subprocess.run(
-            ["python", "-m", "timetrace.cli.main", "list", "--dir", CASSETTE_DIR],
+            ["python", "-m", "timetracer.cli.main", "list", "--dir", CASSETTE_DIR],
             capture_output=True,
             text=True,
             cwd=str(Path(__file__).parent.parent.parent)
@@ -463,7 +463,7 @@ def test_cli_show():
     
     try:
         result = subprocess.run(
-            ["python", "-m", "timetrace.cli.main", "show", str(cassettes[0]), "--events"],
+            ["python", "-m", "timetracer.cli.main", "show", str(cassettes[0]), "--events"],
             capture_output=True,
             text=True,
             cwd=str(Path(__file__).parent.parent.parent)
@@ -494,7 +494,7 @@ def test_cli_timeline():
     
     try:
         result = subprocess.run(
-            ["python", "-m", "timetrace.cli.main", "timeline", str(cassettes[0]), "--out", output_file],
+            ["python", "-m", "timetracer.cli.main", "timeline", str(cassettes[0]), "--out", output_file],
             capture_output=True,
             text=True,
             cwd=str(Path(__file__).parent.parent.parent)
@@ -522,7 +522,7 @@ def test_cli_search():
     
     try:
         result = subprocess.run(
-            ["python", "-m", "timetrace.cli.main", "search", "--dir", CASSETTE_DIR, "--method", "POST"],
+            ["python", "-m", "timetracer.cli.main", "search", "--dir", CASSETTE_DIR, "--method", "POST"],
             capture_output=True,
             text=True,
             cwd=str(Path(__file__).parent.parent.parent)

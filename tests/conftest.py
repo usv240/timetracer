@@ -1,4 +1,4 @@
-"""Pytest configuration for Timetrace tests."""
+"""Pytest configuration for Timetracer tests."""
 
 import pytest
 
@@ -14,7 +14,7 @@ def sample_cassette_data():
             "service": "test-service",
             "env": "test",
             "framework": "fastapi",
-            "timetrace_version": "0.1.0",
+            "timetracer_version": "0.1.0",
             "python_version": "3.11.0",
         },
         "request": {

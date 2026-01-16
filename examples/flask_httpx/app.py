@@ -10,9 +10,9 @@ Demonstrates:
 from flask import Flask, jsonify
 import httpx
 
-from timetrace.integrations.flask import init_app
-from timetrace.config import TraceConfig
-from timetrace.plugins import enable_httpx
+from timetracer.integrations.flask import init_app
+from timetracer.config import TraceConfig
+from timetracer.plugins import enable_httpx
 
 # Create Flask app
 app = Flask(__name__)
