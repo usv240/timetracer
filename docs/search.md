@@ -8,22 +8,22 @@ Search and index cassettes for fast retrieval.
 
 ```bash
 # Search by endpoint
-timetrace search --endpoint /checkout
+timetracer search --endpoint /checkout
 
 # Search by HTTP method
-timetrace search --method POST
+timetracer search --method POST
 
 # Search by status code
-timetrace search --status 500
+timetracer search --status 500
 
 # Search errors only
-timetrace search --errors
+timetracer search --errors
 
 # Combine filters
-timetrace search --method POST --endpoint /api --errors --limit 50
+timetracer search --method POST --endpoint /api --errors --limit 50
 
 # Output as JSON
-timetrace search --endpoint /checkout --json
+timetracer search --endpoint /checkout --json
 ```
 
 ### Build index
@@ -31,13 +31,13 @@ timetrace search --endpoint /checkout --json
 For faster searching on large cassette directories:
 
 ```bash
-timetrace index --dir ./cassettes --out ./cassettes/index.json
+timetracer index --dir ./cassettes --out ./cassettes/index.json
 ```
 
 ## Python API
 
 ```python
-from timetrace.catalog import search_cassettes, build_index, save_index
+from timetracer.catalog import search_cassettes, build_index, save_index
 
 # Search cassettes
 results = search_cassettes(

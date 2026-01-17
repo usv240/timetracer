@@ -104,6 +104,7 @@ enable_redis()
 timetracer list --dir ./cassettes
 timetracer show ./cassettes/GET__users.json --events
 timetracer timeline ./cassettes/GET__users.json --open
+timetracer dashboard --open  # Open interactive dashboard
 ```
 
 ---

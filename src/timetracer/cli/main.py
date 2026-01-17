@@ -205,6 +205,55 @@ def main(args: list[str] | None = None) -> int:
         help="Output index file (default: <dir>/index.json)",
     )
 
+    # Dashboard command
+    dashboard_parser = subparsers.add_parser(
+        "dashboard",
+        help="Generate HTML dashboard to browse cassettes",
+    )
+    dashboard_parser.add_argument(
+        "--dir", "-d",
+        default="./cassettes",
+        help="Cassette directory (default: ./cassettes)",
+    )
+    dashboard_parser.add_argument(
+        "--out", "-o",
+        dest="output",
+        help="Output HTML file (default: dashboard.html)",
+    )
+    dashboard_parser.add_argument(
+        "--limit", "-n",
+        type=int,
+        default=500,
+        help="Maximum cassettes to include (default: 500)",
+    )
+    dashboard_parser.add_argument(
+        "--open",
+        action="store_true",
+        help="Open in browser after generating",
+    )
+
+    # Serve command (live dashboard)
+    serve_parser = subparsers.add_parser(
+        "serve",
+        help="Start live dashboard server with replay capability",
+    )
+    serve_parser.add_argument(
+        "--dir", "-d",
+        default="./cassettes",
+        help="Cassette directory (default: ./cassettes)",
+    )
+    serve_parser.add_argument(
+        "--port", "-p",
+        type=int,
+        default=8765,
+        help="Server port (default: 8765)",
+    )
+    serve_parser.add_argument(
+        "--open",
+        action="store_true",
+        help="Open in browser after starting",
+    )
+
     parsed = parser.parse_args(args)
 
     if parsed.command == "list":
@@ -231,6 +280,10 @@ def main(args: list[str] | None = None) -> int:
         return _cmd_search(parsed)
     elif parsed.command == "index":
         return _cmd_index(parsed)
+    elif parsed.command == "dashboard":
+        return _cmd_dashboard(parsed)
+    elif parsed.command == "serve":
+        return _cmd_serve(parsed)
     else:
         parser.print_help()
         return 0
@@ -564,6 +617,69 @@ def _cmd_index(parsed) -> int:
 
     print(f"Indexed {index.total_count} cassettes")
     print(f"   Output: {output_path}")
+
+    return 0
+
+
+def _cmd_dashboard(parsed) -> int:
+    """Generate HTML dashboard for browsing cassettes."""
+    from pathlib import Path
+
+    from timetracer.dashboard import generate_dashboard, render_dashboard_html
+
+    print(f"Generating dashboard for {parsed.dir}...")
+
+    # Generate dashboard data
+    dashboard_data = generate_dashboard(parsed.dir, limit=parsed.limit)
+
+    if dashboard_data.total_count == 0:
+        print(f"No cassettes found in {parsed.dir}")
+        return 1
+
+    # Render HTML
+    html_content = render_dashboard_html(dashboard_data)
+
+    # Determine output path
+    output_path = parsed.output or "dashboard.html"
+
+    # Write file
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(html_content)
+
+    print(f"Dashboard generated: {output_path}")
+    print(f"   Cassettes: {dashboard_data.total_count}")
+    print(f"   Success: {dashboard_data.success_count}")
+    print(f"   Errors: {dashboard_data.error_count}")
+
+    # Open in browser if requested
+    if parsed.open:
+        import webbrowser
+        webbrowser.open(f"file://{Path(output_path).absolute()}")
+        print("   Opened in browser")
+
+    return 0
+
+
+def _cmd_serve(parsed) -> int:
+    """Start live dashboard server with replay capability."""
+    import threading
+    import webbrowser
+
+    from timetracer.dashboard.server import start_server
+
+    port = parsed.port
+    url = f"http://localhost:{port}"
+
+    # Open browser in a separate thread after a short delay
+    if parsed.open:
+        def open_browser():
+            import time
+            time.sleep(1)
+            webbrowser.open(url)
+        threading.Thread(target=open_browser, daemon=True).start()
+
+    # Start server (blocks)
+    start_server(parsed.dir, port)
 
     return 0
 

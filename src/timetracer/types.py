@@ -146,6 +146,7 @@ class Cassette:
     events: list[DependencyEvent] = field(default_factory=list)
     policies: AppliedPolicies = field(default_factory=AppliedPolicies)
     stats: CaptureStats = field(default_factory=CaptureStats)
+    error_info: dict[str, Any] | None = None  # Stack trace, error type, message
 
 
 # =============================================================================

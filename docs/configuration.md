@@ -9,7 +9,7 @@ Complete reference for all Timetracer configuration options.
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `mode` | `TraceMode` | `off` | Operating mode: `off`, `record`, `replay` |
-| `service_name` | `str` | `timetrace-service` | Name of your service |
+| `service_name` | `str` | `timetracer-service` | Name of your service |
 | `env` | `str` | `local` | Environment name |
 
 ### Cassette Storage

@@ -214,6 +214,7 @@ class TraceSession(BaseSession):
             events=self.events,
             policies=policies,
             stats=stats,
+            error_info=self._error_info if self._is_error else None,
         )
 
 

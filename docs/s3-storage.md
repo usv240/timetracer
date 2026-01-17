@@ -5,7 +5,7 @@ Store and retrieve cassettes from AWS S3 or S3-compatible storage.
 ## Installation
 
 ```bash
-pip install timetrace[s3]
+pip install timetracer[s3]
 ```
 
 ## Configuration
@@ -27,38 +27,38 @@ pip install timetrace[s3]
 
 ```bash
 # Upload single file
-timetrace s3 upload ./cassettes/POST__checkout__a91c.json -b my-bucket
+timetracer s3 upload ./cassettes/POST__checkout__a91c.json -b my-bucket
 
 # Upload directory
-timetrace s3 upload ./cassettes/ -b my-bucket
+timetracer s3 upload ./cassettes/ -b my-bucket
 ```
 
 ### Download from S3
 
 ```bash
-timetrace s3 download 2026-01-15/POST__checkout__a91c.json -b my-bucket -o ./local.json
+timetracer s3 download 2026-01-15/POST__checkout__a91c.json -b my-bucket -o ./local.json
 ```
 
 ### List cassettes
 
 ```bash
-timetrace s3 list -b my-bucket -n 50
+timetracer s3 list -b my-bucket -n 50
 ```
 
 ### Sync cassettes
 
 ```bash
 # Upload all local cassettes to S3
-timetrace s3 sync up -d ./cassettes -b my-bucket
+timetracer s3 sync up -d ./cassettes -b my-bucket
 
 # Download all S3 cassettes to local
-timetrace s3 sync down -d ./cassettes -b my-bucket
+timetracer s3 sync down -d ./cassettes -b my-bucket
 ```
 
 ## Python API
 
 ```python
-from timetrace.storage import S3Store, S3Config
+from timetracer.storage import S3Store, S3Config
 
 # Configure
 config = S3Config(

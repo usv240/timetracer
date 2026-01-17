@@ -163,7 +163,7 @@ All settings are controlled via environment variables:
 | **Databases** | SQLAlchemy |
 | **Cache** | Redis |
 | **Storage** | Local filesystem, AWS S3 |
-| **Tools** | CLI, diff engine, HTML timeline |
+| **Tools** | CLI, diff engine, HTML timeline, **Dashboard** |
 
 ---
 
@@ -174,7 +174,31 @@ timetracer list --dir ./cassettes              # List all cassettes
 timetracer show ./cassettes/GET__users.json    # Show cassette details
 timetracer diff --a old.json --b new.json      # Compare two cassettes
 timetracer timeline ./cassettes/GET__users.json --open  # Generate timeline
+timetracer dashboard --dir ./cassettes --open  # Generate interactive dashboard
+timetracer serve --dir ./cassettes --open      # Start live dashboard with replay
 ```
+
+---
+
+## Dashboard
+
+Browse and debug all recorded cassettes with the interactive dashboard:
+
+```bash
+# Static HTML dashboard (open in browser)
+timetracer dashboard --dir ./cassettes --open
+
+# Live dashboard with real-time replay
+timetracer serve --dir ./cassettes --open
+```
+
+**Features:**
+- 📊 **Sortable table** - Sort by time, method, status, duration
+- 🔍 **Filters** - Filter by method, status, duration, time range
+- ⚠️ **Error highlighting** - Errors shown in red with warning icons
+- 📋 **Stack traces** - View exception details and Python tracebacks
+- ▶️ **Replay** - One-click replay to see recorded request/response
+- 📁 **Raw JSON** - Expandable view of full cassette data
 
 ---
 
@@ -190,10 +214,15 @@ Timetracer automatically protects sensitive data:
 
 ## Documentation
 
+- [Why Timetracer?](docs/why-timetracer.md)
 - [Quick Start Guide](docs/quickstart.md)
 - [Configuration Reference](docs/configuration.md)
+- [Dashboard Guide](docs/dashboard.md)
 - [Plugin Guide](docs/plugins.md)
+- [SQLAlchemy Integration](docs/sqlalchemy.md)
 - [Flask Integration](docs/flask.md)
+- [S3 Storage](docs/s3-storage.md)
+- [Cassette Search](docs/search.md)
 - [Security Best Practices](docs/security.md)
 
 ---
