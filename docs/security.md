@@ -1,35 +1,67 @@
-# timetracer Security Guide
+# Timetracer Security Guide
 
-Best practices for secure usage of timetracer cassettes.
+Best practices for secure usage of Timetracer cassettes.
 
 ## Default Redaction
 
-timetracer automatically redacts sensitive data to prevent accidental exposure.
+Timetracer automatically redacts sensitive data to prevent accidental exposure.
 
 ### Sensitive Headers (Always Removed)
 
 These headers are **never** stored in cassettes:
 
+**Authentication:**
 - `authorization`
-- `cookie`
-- `set-cookie`
-- `x-api-key`
-- `x-auth-token`
-- `x-access-token`
+- `x-api-key`, `api-key`, `apikey`
+- `x-auth-token`, `x-access-token`, `x-refresh-token`
+- `x-session-token`
+
+**Security Tokens:**
+- `x-csrf-token`, `x-xsrf-token`
+
+**Session/Cookies:**
+- `cookie`, `set-cookie`
+
+**Proxy:**
+- `proxy-authorization`, `www-authenticate`
 
 ### Sensitive Body Keys (Masked)
 
-Values for these keys are replaced with `[REDACTED]`:
+Values for keys containing these patterns are replaced with `[REDACTED]`:
 
-- `password`
-- `secret`
-- `token`
-- `api_key` / `apikey`
-- `access_token`
-- `refresh_token`
-- `private_key`
-- `credit_card`
-- `ssn`
+**Authentication & Security:**
+- `password`, `passwd`, `pwd`, `secret`
+- `token`, `api_key`, `apikey`, `access_token`, `refresh_token`
+- `private_key`, `secret_key`, `signing_key`, `encryption_key`
+- `csrf`, `xsrf`, `otp`, `mfa`, `pin`
+
+**Personal Information (PII):**
+- `ssn`, `social_security`, `passport`, `driver_license`
+- `phone`, `mobile`, `email`, `email_address`
+- `date_of_birth`, `dob`, `address`, `zip_code`
+
+**Financial (PCI-DSS Compliance):**
+- `credit_card`, `card_number`, `cvv`, `cvc`
+- `bank_account`, `account_number`, `routing_number`
+- `iban`, `swift`, `expiry`, `cardholder`
+
+**Healthcare (HIPAA Compliance):**
+- `patient_id`, `medical_record`, `diagnosis`
+- `insurance_id`, `policy_number`, `provider_id`
+
+### PII Pattern Detection
+
+Timetracer also detects and redacts PII patterns in string values:
+
+| Pattern | Example | Redacted As |
+|---------|---------|-------------|
+| Email | `user@example.com` | `[REDACTED:EMAIL]` |
+| Phone | `555-123-4567` | `[REDACTED:PHONE]` |
+| SSN | `123-45-6789` | `[REDACTED:SSN]` |
+| Credit Card (Luhn validated) | `4111-1111-1111-1111` | `[REDACTED:CREDIT_CARD]` |
+| IPv4 | `192.168.1.1` | `[REDACTED:IP]` |
+| IPv6 | `2001:0db8:...` | `[REDACTED:IP]` |
+| JWT | `eyJhbGc...` | `[REDACTED]` |
 
 ## Allowed Headers
 

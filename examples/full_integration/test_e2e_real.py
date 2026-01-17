@@ -165,8 +165,17 @@ def test_record_mode():
             stop_server(proc)
 
 
-def test_replay_mode(cassette_path: Path):
-    """Test replaying from cassette."""
+def test_replay_mode(cassette_path: Path = None):
+    """Test replaying from cassette.
+
+    Note: When run via pytest, this test is skipped since it depends on
+    cassette_path from test_record_mode. Use 'python test_e2e_real.py'
+    to run the full integration test.
+    """
+    import pytest
+    if cassette_path is None:
+        pytest.skip("Skipped in pytest - run 'python test_e2e_real.py' for full test")
+
     print("\n[PHASE 2] Replay Mode - Mocked External Calls")
     print("-" * 40)
 

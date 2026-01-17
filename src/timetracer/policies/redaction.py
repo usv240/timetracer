@@ -139,14 +139,120 @@ def _is_sensitive_key(key: str, sensitive_keys: frozenset[str]) -> bool:
     return False
 
 
+# =============================================================================
+# PII PATTERN DETECTION
+# =============================================================================
+
+# Compiled regex patterns for performance
+_PII_PATTERNS: dict[str, re.Pattern[str]] = {
+    # Email addresses
+    "email": re.compile(
+        r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}",
+        re.IGNORECASE
+    ),
+    # Phone numbers (various formats)
+    "phone": re.compile(
+        r"(?:\+\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}"
+    ),
+    # US Social Security Numbers
+    "ssn": re.compile(
+        r"\b\d{3}[-\s]?\d{2}[-\s]?\d{4}\b"
+    ),
+    # Credit card numbers (with optional separators)
+    "credit_card": re.compile(
+        r"\b(?:\d{4}[-\s]?){3}\d{4}\b"
+    ),
+    # IPv4 addresses
+    "ipv4": re.compile(
+        r"\b(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\b"
+    ),
+    # IPv6 addresses (simplified)
+    "ipv6": re.compile(
+        r"\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b"
+    ),
+}
+
+
+def _luhn_check(card_number: str) -> bool:
+    """
+    Validate credit card number using Luhn algorithm.
+
+    This helps distinguish actual credit card numbers from random 16-digit strings.
+    """
+    digits = [int(d) for d in card_number if d.isdigit()]
+    if len(digits) < 13 or len(digits) > 19:
+        return False
+
+    # Luhn algorithm
+    checksum = 0
+    for i, digit in enumerate(reversed(digits)):
+        if i % 2 == 1:
+            digit *= 2
+            if digit > 9:
+                digit -= 9
+        checksum += digit
+
+    return checksum % 10 == 0
+
+
+def detect_pii(value: str) -> str | None:
+    """
+    Detect PII patterns in a string value.
+
+    Args:
+        value: The string to check for PII patterns.
+
+    Returns:
+        The type of PII detected (e.g., 'email', 'phone', 'ssn', 'credit_card'),
+        or None if no PII is detected.
+    """
+    if not isinstance(value, str) or len(value) < 5:
+        return None
+
+    # Check for email
+    if _PII_PATTERNS["email"].search(value):
+        return "email"
+
+    # Check for SSN
+    if _PII_PATTERNS["ssn"].fullmatch(value.replace("-", "").replace(" ", "")):
+        return "ssn"
+
+    # Check for credit card (with Luhn validation)
+    cc_match = _PII_PATTERNS["credit_card"].search(value)
+    if cc_match:
+        cc_digits = "".join(c for c in cc_match.group() if c.isdigit())
+        if _luhn_check(cc_digits):
+            return "credit_card"
+
+    # Check for phone
+    if _PII_PATTERNS["phone"].search(value):
+        # Avoid false positives - must have reasonable length
+        digits_only = "".join(c for c in value if c.isdigit())
+        if 10 <= len(digits_only) <= 15:
+            return "phone"
+
+    # Check for IP addresses
+    if _PII_PATTERNS["ipv4"].search(value):
+        return "ipv4"
+    if _PII_PATTERNS["ipv6"].search(value):
+        return "ipv6"
+
+    return None
+
+
 def _mask_token_like(value: str) -> str:
     """
-    Mask token-like strings in values.
+    Mask token-like strings and PII patterns in values.
 
-    Patterns:
+    Patterns detected:
     - JWT tokens (eyJ...)
     - Bearer tokens
     - API keys (long alphanumeric strings)
+    - Email addresses
+    - Credit card numbers (Luhn validated)
+    - Social Security Numbers
+    - Phone numbers
+    - IP addresses
     """
     # JWT pattern
     if value.startswith("eyJ") and value.count(".") == 2:
@@ -162,4 +268,58 @@ def _mask_token_like(value: str) -> str:
         if re.search(r"[a-z]", value) and re.search(r"[A-Z0-9_-]", value):
             return Redaction.REDACTED_VALUE
 
+    # PII pattern detection
+    pii_type = detect_pii(value)
+    if pii_type:
+        return f"[REDACTED:{pii_type.upper()}]"
+
     return value
+
+
+def redact_pii_in_text(text: str) -> str:
+    """
+    Redact all detected PII patterns in a text string.
+
+    This is useful for redacting PII in unstructured text fields
+    like comments or descriptions.
+
+    Args:
+        text: The text to scan and redact.
+
+    Returns:
+        Text with PII patterns replaced with [REDACTED:TYPE].
+    """
+    if not isinstance(text, str):
+        return text
+
+    result = text
+
+    # Redact emails
+    result = _PII_PATTERNS["email"].sub("[REDACTED:EMAIL]", result)
+
+    # Redact SSNs
+    result = _PII_PATTERNS["ssn"].sub("[REDACTED:SSN]", result)
+
+    # Redact credit cards (only those passing Luhn check)
+    def replace_cc(match: re.Match[str]) -> str:
+        cc_digits = "".join(c for c in match.group() if c.isdigit())
+        if _luhn_check(cc_digits):
+            return "[REDACTED:CREDIT_CARD]"
+        return match.group()
+
+    result = _PII_PATTERNS["credit_card"].sub(replace_cc, result)
+
+    # Redact phone numbers
+    def replace_phone(match: re.Match[str]) -> str:
+        digits_only = "".join(c for c in match.group() if c.isdigit())
+        if 10 <= len(digits_only) <= 15:
+            return "[REDACTED:PHONE]"
+        return match.group()
+
+    result = _PII_PATTERNS["phone"].sub(replace_phone, result)
+
+    # Redact IP addresses
+    result = _PII_PATTERNS["ipv4"].sub("[REDACTED:IP]", result)
+    result = _PII_PATTERNS["ipv6"].sub("[REDACTED:IP]", result)
+
+    return result

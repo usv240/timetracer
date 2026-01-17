@@ -22,6 +22,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from timetracer.config import TraceConfig, TraceMode
+from timetracer.integrations.fastapi import TimeTraceMiddleware
 from timetracer.plugins import disable_httpx, enable_httpx
 
 
@@ -103,8 +104,17 @@ def test_record_mode():
         return None
 
 
-def test_replay_mode(cassette_path: str):
-    """Test that replay mode mocks HTTP calls."""
+def test_replay_mode(cassette_path: str = None):
+    """Test that replay mode mocks HTTP calls.
+
+    Note: When run via pytest, this test is skipped since it depends on
+    cassette_path from test_record_mode. Use 'python test_integration.py'
+    to run the full integration test.
+    """
+    import pytest
+    if cassette_path is None:
+        pytest.skip("Skipped in pytest - run 'python test_integration.py' for full test")
+
     print("\n" + "=" * 60)
     print("TEST 2: Replay Mode")
     print("=" * 60)

@@ -193,12 +193,12 @@ timetracer serve --dir ./cassettes --open
 ```
 
 **Features:**
-- 📊 **Sortable table** - Sort by time, method, status, duration
-- 🔍 **Filters** - Filter by method, status, duration, time range
-- ⚠️ **Error highlighting** - Errors shown in red with warning icons
-- 📋 **Stack traces** - View exception details and Python tracebacks
-- ▶️ **Replay** - One-click replay to see recorded request/response
-- 📁 **Raw JSON** - Expandable view of full cassette data
+- **Sortable table** - Sort by time, method, status, duration
+- **Filters** - Filter by method, status, duration, time range
+- **Error highlighting** - Errors shown in red with warning icons
+- **Stack traces** - View exception details and Python tracebacks
+- **Replay** - One-click replay to see recorded request/response
+- **Raw JSON** - Expandable view of full cassette data
 
 ---
 

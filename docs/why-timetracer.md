@@ -14,23 +14,23 @@ Timetracer is a production-grade debugging tool that captures API requests with 
 
 ## Key Advantages
 
-### 🎯 Multi-Dependency Capture
+### Multi-Dependency Capture
 
 **The only tool that captures everything in a single cassette:**
 
 | Dependency Type | Captured |
 |-----------------|----------|
-| Incoming HTTP requests | ✅ |
-| Outgoing HTTP calls (httpx, requests) | ✅ |
-| Database queries (SQLAlchemy) | ✅ |
-| Cache operations (Redis) | ✅ |
-| Error stack traces | ✅ |
+| Incoming HTTP requests | Yes |
+| Outgoing HTTP calls (httpx, requests) | Yes |
+| Database queries (SQLAlchemy) | Yes |
+| Cache operations (Redis) | Yes |
+| Error stack traces | Yes |
 
 **Why it matters:** Competitors only capture HTTP. To achieve what Timetracer does, you would need 3+ separate tools configured and synchronized together.
 
 ---
 
-### ⚡ Zero-Configuration Setup
+### Zero-Configuration Setup
 
 **Add two lines of code. Done.**
 
@@ -48,7 +48,7 @@ No test decorators. No manual stub configuration. No proxy setup. The middleware
 
 ---
 
-### 🏭 Production-First Design
+### Production-First Design
 
 **Built for production debugging, not just testing.**
 
@@ -70,7 +70,7 @@ TIMETRACER_MODE=replay TIMETRACER_CASSETTE=error.json uvicorn app:app
 
 ---
 
-### 🖥️ Interactive Dashboard
+### Interactive Dashboard
 
 **Visual debugging interface with real-time replay.**
 
@@ -95,7 +95,7 @@ timetracer serve --dir ./cassettes --open
 
 ---
 
-### 🔀 Hybrid Replay Mode
+### Hybrid Replay Mode
 
 **Mock some dependencies. Keep others live.**
 
@@ -115,7 +115,7 @@ uvicorn app:app
 
 ---
 
-### ☁️ Cloud Storage Support
+### Cloud Storage Support
 
 **Share cassettes across teams with S3 integration.**
 
@@ -135,7 +135,7 @@ uvicorn app:app
 
 ---
 
-### 🔐 Security by Default
+### Security by Default
 
 **Automatic sensitive data protection.**
 
@@ -150,7 +150,7 @@ Built-in redaction for:
 
 ---
 
-### 📊 Comparison Tools
+### Comparison Tools
 
 **Built-in diff engine for regression detection.**
 
@@ -172,7 +172,7 @@ timetracer diff --a baseline.json --b current.json
 
 ---
 
-### 📈 Timeline Visualization
+### Timeline Visualization
 
 **Dependency waterfall charts for performance analysis.**
 
@@ -206,21 +206,21 @@ timetracer timeline ./cassette.json --open
 
 | Feature | Timetracer | VCR.py | Betamax | WireMock | Hoverfly |
 |---------|-----------|--------|---------|----------|----------|
-| HTTP Recording | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Database Recording | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Redis Recording | ✅ | ❌ | ❌ | ❌ | ❌ |
-| FastAPI Middleware | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Flask Middleware | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Interactive Dashboard | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Stack Trace Capture | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Hybrid Replay | ✅ | ❌ | ❌ | ⚠️ Partial | ⚠️ Partial |
-| S3 Storage | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Diff Tool | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Timeline Visualization | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Auto Redaction | ✅ | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
-| Zero-Config Setup | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Python Native | ✅ | ✅ | ✅ | ❌ Java | ❌ Go |
-| Production Capture | ✅ | ❌ | ❌ | ❌ | ⚠️ Partial |
+| HTTP Recording | Yes | Yes | Yes | Yes | Yes |
+| Database Recording | Yes | No | No | No | No |
+| Redis Recording | Yes | No | No | No | No |
+| FastAPI Middleware | Yes | No | No | No | No |
+| Flask Middleware | Yes | No | No | No | No |
+| Interactive Dashboard | Yes | No | No | No | No |
+| Stack Trace Capture | Yes | No | No | No | No |
+| Hybrid Replay | Yes | No | No | Partial | Partial |
+| S3 Storage | Yes | No | No | No | No |
+| Diff Tool | Yes | No | No | No | No |
+| Timeline Visualization | Yes | No | No | No | No |
+| Auto Redaction | Yes | Manual | Manual | Manual | Manual |
+| Zero-Config Setup | Yes | No | No | No | No |
+| Python Native | Yes | Yes | Yes | No (Java) | No (Go) |
+| Production Capture | Yes | No | No | No | Partial |
 
 ---
 

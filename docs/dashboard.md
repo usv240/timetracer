@@ -77,7 +77,7 @@ timetracer serve --dir ./cassettes --port 8765 --open
 
 - **Red row background** - Requests with 4xx/5xx status
 - **Red left border** - Visual indicator of errors
-- **Warning icon ⚠** - Slow requests (>1000ms)
+- **Warning icon** - Slow requests (>1000ms)
 
 ### Detail Modal
 

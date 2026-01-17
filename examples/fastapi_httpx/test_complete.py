@@ -30,6 +30,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from timetracer.config import TraceConfig, TraceMode
+from timetracer.integrations.fastapi import TimeTraceMiddleware
 from timetracer.plugins import disable_httpx, enable_httpx
 
 # Track test results
