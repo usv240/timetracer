@@ -159,10 +159,10 @@ def render_live_dashboard_html(data: Any) -> str:
     function liveReplay(cassettePath) {
         const modal = document.getElementById('detail-modal');
         const body = document.getElementById('modal-body');
-        
+
         body.innerHTML = '<div style="text-align:center;padding:40px;"><h3>Loading replay...</h3></div>';
         modal.classList.add('show');
-        
+
         fetch('/api/replay', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -174,7 +174,7 @@ def render_live_dashboard_html(data: Any) -> str:
                 body.innerHTML = '<div style="color:#ff6b6b;padding:20px;">Error: ' + result.error + '</div>';
                 return;
             }
-            
+
             body.innerHTML = `
                 <div class="detail-section">
                     <h3 style="color:#00ff88;">Replay Result</h3>
@@ -187,7 +187,7 @@ def render_live_dashboard_html(data: Any) -> str:
                         <span class="detail-value">${result.response.duration_ms.toFixed(2)}ms</span>
                     </div>
                 </div>
-                
+
                 ${result.events.length > 0 ? `
                 <div class="detail-section">
                     <h3>Mocked Dependencies (${result.events.length})</h3>
@@ -203,14 +203,14 @@ def render_live_dashboard_html(data: Any) -> str:
                     </div>
                 </div>
                 ` : ''}
-                
+
                 ${result.response.body ? `
                 <div class="detail-section">
                     <h3>Response Body</h3>
                     <pre style="background:rgba(0,0,0,0.4);padding:16px;border-radius:8px;max-height:300px;overflow:auto;font-size:0.8rem;color:#98c379;">${typeof result.response.body === 'string' ? result.response.body : JSON.stringify(result.response.body, null, 2)}</pre>
                 </div>
                 ` : ''}
-                
+
                 <div class="detail-section">
                     <p style="color:#888;font-size:0.85rem;">${result.message}</p>
                 </div>
