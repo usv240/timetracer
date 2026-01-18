@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from flask import Flask
 
 
-class TimeTraceMiddleware:
+class TimeTracerMiddleware:
     """
     WSGI middleware for Timetracer integration with Flask.
 
@@ -37,12 +37,12 @@ class TimeTraceMiddleware:
 
     Usage:
         from flask import Flask
-        from timetracer.integrations.flask import timetracerMiddleware
+        from timetracer.integrations.flask import TimeTracerMiddleware
         from timetracer.config import TraceConfig
 
         app = Flask(__name__)
         config = TraceConfig(mode="record", cassette_dir="./cassettes")
-        app.wsgi_app = TimeTraceMiddleware(app.wsgi_app, config=config)
+        app.wsgi_app = TimeTracerMiddleware(app.wsgi_app, config=config)
     """
 
     def __init__(
@@ -446,7 +446,7 @@ def init_app(app: "Flask", config: TraceConfig | None = None) -> None:
         init_app(app, TraceConfig(mode="record"))
     """
     cfg = config or TraceConfig.from_env()
-    app.wsgi_app = TimeTraceMiddleware(app.wsgi_app, config=cfg)
+    app.wsgi_app = TimeTracerMiddleware(app.wsgi_app, config=cfg)
 
 
 def auto_setup(
@@ -481,7 +481,7 @@ def auto_setup(
     cfg = config or TraceConfig.from_env()
 
     # Add middleware
-    app.wsgi_app = TimeTraceMiddleware(app.wsgi_app, config=cfg)
+    app.wsgi_app = TimeTracerMiddleware(app.wsgi_app, config=cfg)
 
     # Enable plugins
     enabled_plugins = plugins or ["requests"]
@@ -503,5 +503,6 @@ def auto_setup(
     return app
 
 
-# Backwards compatibility alias
-timetracerMiddleware = TimeTraceMiddleware
+# Backwards compatibility aliases
+TimeTraceMiddleware = TimeTracerMiddleware  # Old name (deprecated)
+timetracerMiddleware = TimeTracerMiddleware

@@ -108,3 +108,50 @@ export TIMETRACER_S3_ENDPOINT=http://localhost:9000
 export AWS_ACCESS_KEY_ID=minioadmin
 export AWS_SECRET_ACCESS_KEY=minioadmin
 ```
+
+## CI/CD Integration
+
+### ArgoWorkflows
+
+Store cassettes as workflow artifacts for debugging production issues:
+
+```yaml
+# argo-workflow.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+spec:
+  templates:
+    - name: api-task
+      container:
+        image: your-api:latest
+        env:
+          - name: TIMETRACER_MODE
+            value: record
+          - name: TIMETRACER_S3_BUCKET
+            value: cassettes-bucket
+          - name: TIMETRACER_S3_PREFIX
+            value: workflows/{{workflow.name}}
+```
+
+When a task fails:
+1. Download the cassette from S3
+2. Replay locally with dependencies mocked
+3. Debug without needing production access
+
+### GitHub Actions
+
+```yaml
+- name: Upload cassettes on failure
+  if: failure()
+  run: timetracer s3 upload ./cassettes -b ${{ secrets.CASSETTE_BUCKET }}
+```
+
+### Generic CI
+
+Any CI that supports S3 artifacts can use Timetracer:
+
+```bash
+# After running tests or on failure
+TIMETRACER_S3_BUCKET=my-bucket timetracer s3 sync up -d ./cassettes
+```
+

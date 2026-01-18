@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "timetracer"
-version = "1.2.0"
+version = "1.3.0"
 description = "Time-travel debugging for FastAPI and Flask - record API cassettes, replay with mocked dependencies"
 readme = "README.md"
 license = {text = "MIT"}
@@ -39,6 +39,9 @@ flask = [
 httpx = [
     "httpx>=0.24.0",
 ]
+aiohttp = [
+    "aiohttp>=3.8.0",
+]
 requests = [
     "requests>=2.28.0",
 ]
@@ -52,7 +55,7 @@ s3 = [
     "boto3>=1.26.0",
 ]
 all = [
-    "timetracer[fastapi,flask,httpx,requests,sqlalchemy,redis,s3]",
+    "timetracer[fastapi,flask,httpx,aiohttp,requests,sqlalchemy,redis,s3]",
 ]
 dev = [
     "timetracer[all]",

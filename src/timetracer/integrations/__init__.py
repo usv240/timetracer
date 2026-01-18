@@ -1,13 +1,13 @@
 """Framework integrations for Timetracer."""
 
-from timetracer.integrations.fastapi import TimeTraceMiddleware, auto_setup
+from timetracer.integrations.fastapi import TimeTraceMiddleware, TimeTracerMiddleware, auto_setup
 
 # Alias for backwards compatibility
-timetracerMiddleware = TimeTraceMiddleware
+timetracerMiddleware = TimeTracerMiddleware
 
 # Flask is optional
 try:
-    from timetracer.integrations.flask import TimeTraceMiddleware as FlaskMiddleware
+    from timetracer.integrations.flask import TimeTracerMiddleware as FlaskMiddleware
     from timetracer.integrations.flask import auto_setup as flask_auto_setup
     from timetracer.integrations.flask import init_app
     _HAS_FLASK = True
@@ -18,10 +18,12 @@ except ImportError:
     flask_auto_setup = None
 
 __all__ = [
-    "TimeTraceMiddleware",
+    "TimeTracerMiddleware",
+    "TimeTraceMiddleware",  # Deprecated alias
     "timetracerMiddleware",  # Alias
     "auto_setup",
     "FlaskMiddleware",
     "init_app",
     "flask_auto_setup",
 ]
+

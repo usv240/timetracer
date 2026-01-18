@@ -5,7 +5,9 @@ Get up and running in under 5 minutes.
 ## Installation
 
 ```bash
-pip install timetracer[fastapi,httpx]
+pip install timetracer[fastapi,httpx]    # with httpx
+# or
+pip install timetracer[fastapi,aiohttp]  # with aiohttp
 ```
 
 ## FastAPI Setup
@@ -75,11 +77,11 @@ For more control over configuration:
 ```python
 from fastapi import FastAPI
 from timetracer import TraceConfig
-from timetracer.integrations.fastapi import TimeTraceMiddleware
+from timetracer.integrations.fastapi import TimeTracerMiddleware
 from timetracer.plugins import enable_httpx, enable_redis
 
 app = FastAPI()
-app.add_middleware(TimeTraceMiddleware, config=TraceConfig.from_env())
+app.add_middleware(TimeTracerMiddleware, config=TraceConfig.from_env())
 enable_httpx()
 enable_redis()
 ```

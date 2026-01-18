@@ -76,3 +76,11 @@ cassettes/
 *.cassette.json
 e2e_cassettes/
 *.db
+
+# Generated files
+dashboard_screenshot.html
+timeline_*.html
+
+# Promotional materials (keep local only)
+blog/
+

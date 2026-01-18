@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 
-class TimeTraceMiddleware:
+class TimeTracerMiddleware:
     """
     ASGI middleware for Timetracer integration.
 
@@ -37,12 +37,12 @@ class TimeTraceMiddleware:
 
     Usage:
         from fastapi import FastAPI
-        from timetracer.integrations.fastapi import timetracerMiddleware
+        from timetracer.integrations.fastapi import TimeTracerMiddleware
         from timetracer.config import TraceConfig
 
         app = FastAPI()
         config = TraceConfig(mode="record", cassette_dir="./cassettes")
-        app.add_middleware(TimeTraceMiddleware, config=config)
+        app.add_middleware(TimeTracerMiddleware, config=config)
     """
 
     def __init__(
@@ -511,7 +511,7 @@ def auto_setup(
     cfg = config or TraceConfig.from_env()
 
     # Add middleware
-    app.add_middleware(TimeTraceMiddleware, config=cfg)
+    app.add_middleware(TimeTracerMiddleware, config=cfg)
 
     # Enable plugins
     enabled_plugins = plugins or ["httpx"]
@@ -529,9 +529,14 @@ def auto_setup(
         elif plugin == "redis":
             from timetracer.plugins import enable_redis
             enable_redis()
+        elif plugin == "aiohttp":
+            from timetracer.plugins import enable_aiohttp
+            enable_aiohttp()
 
     return app
 
 
-# Backwards compatibility alias
-timetracerMiddleware = TimeTraceMiddleware
+# Backwards compatibility aliases
+TimeTraceMiddleware = TimeTracerMiddleware  # Old name (deprecated)
+timetracerMiddleware = TimeTracerMiddleware
+

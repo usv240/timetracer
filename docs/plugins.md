@@ -37,6 +37,33 @@ response = requests.get("https://api.example.com/data")
 disable_requests()
 ```
 
+### aiohttp Plugin
+
+Captures and replays aiohttp async HTTP client calls.
+
+```python
+from timetracer.plugins import enable_aiohttp, disable_aiohttp
+
+enable_aiohttp()
+
+# Your code using aiohttp will now be captured
+async with aiohttp.ClientSession() as session:
+    async with session.get("https://api.example.com/data") as resp:
+        data = await resp.json()
+
+disable_aiohttp()
+```
+
+**Supported methods:**
+- `session.get()`, `session.post()`, `session.put()`, `session.delete()`, `session.patch()`
+- Request body via `data=` or `json=` parameters
+- Query parameters via URL or `params=`
+
+**Installation:**
+```bash
+pip install timetracer[aiohttp]
+```
+
 ### SQLAlchemy Plugin
 
 Captures database queries (SELECT, INSERT, UPDATE, DELETE).

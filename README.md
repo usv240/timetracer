@@ -67,8 +67,9 @@ pip install timetracer[all]
 Or install only what you need:
 
 ```bash
-pip install timetracer[fastapi,httpx]    # FastAPI + HTTP
-pip install timetracer[flask,requests]   # Flask + HTTP
+pip install timetracer[fastapi,httpx]    # FastAPI + httpx
+pip install timetracer[fastapi,aiohttp]  # FastAPI + aiohttp
+pip install timetracer[flask,requests]   # Flask + requests
 ```
 
 ---
@@ -121,7 +122,7 @@ For more control over configuration:
 import httpx
 from fastapi import FastAPI
 from timetracer import TraceConfig
-from timetracer.integrations.fastapi import TimeTraceMiddleware
+from timetracer.integrations.fastapi import TimeTracerMiddleware
 from timetracer.plugins import enable_httpx
 
 app = FastAPI()
@@ -131,7 +132,7 @@ config = TraceConfig(
     cassette_dir="./my-cassettes",
     errors_only=True,
 )
-app.add_middleware(TimeTraceMiddleware, config=config)
+app.add_middleware(TimeTracerMiddleware, config=config)
 
 enable_httpx()
 ```
@@ -159,7 +160,7 @@ All settings are controlled via environment variables:
 | Category | Supported |
 |----------|-----------|
 | **Frameworks** | FastAPI, Flask |
-| **HTTP Clients** | httpx, requests |
+| **HTTP Clients** | httpx, requests, aiohttp |
 | **Databases** | SQLAlchemy |
 | **Cache** | Redis |
 | **Storage** | Local filesystem, AWS S3 |

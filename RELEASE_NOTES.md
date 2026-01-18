@@ -1,5 +1,55 @@
 # Release Notes
 
+## v1.3.0 - aiohttp Support (2026-01-18)
+
+### Highlights
+
+Added full support for **aiohttp** HTTP client, completing the trio of supported Python HTTP clients (httpx, requests, aiohttp).
+
+### New Plugin: aiohttp
+
+Record and replay aiohttp async HTTP client calls:
+
+```python
+from timetracer.plugins import enable_aiohttp, disable_aiohttp
+
+enable_aiohttp()
+
+async with aiohttp.ClientSession() as session:
+    async with session.get("https://api.example.com/data") as resp:
+        data = await resp.json()
+```
+
+**Features:**
+- Full async support with `ClientSession`
+- Request body capture (data, json parameters)
+- Response body capture and replay
+- Query parameter handling
+- Error recording and replay
+- Mock response with full `ClientResponse` interface
+
+**Installation:**
+```bash
+pip install timetracer[aiohttp]
+```
+
+### Documentation
+
+- Added aiohttp plugin documentation
+- Added CI/CD integration guide (ArgoWorkflows, GitHub Actions)
+- Updated README with aiohttp examples
+- New example project: `examples/fastapi_aiohttp/`
+
+### API Changes
+
+- **Middleware renamed**: `TimeTraceMiddleware` is now `TimeTracerMiddleware`
+  - Old name still works (backward compatible alias)
+  - Update imports when convenient: `from timetracer.integrations.fastapi import TimeTracerMiddleware`
+
+- **auto_setup()** now supports `"aiohttp"` in plugins list
+
+---
+
 ## v1.2.0 - Enhanced Security (2026-01-17)
 
 ### Highlights
