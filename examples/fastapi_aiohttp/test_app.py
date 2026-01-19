@@ -14,7 +14,7 @@ from fastapi.testclient import TestClient
 
 from timetracer.config import TraceConfig, TraceMode
 from timetracer.integrations.fastapi import TimeTracerMiddleware
-from timetracer.plugins import enable_aiohttp, disable_aiohttp
+from timetracer.plugins import disable_aiohttp, enable_aiohttp
 
 
 # Import the endpoints from app.py (we'll recreate them for testing)
@@ -22,21 +22,21 @@ def create_test_app(config: TraceConfig):
     """Create a test app with the given config."""
     import aiohttp
     from fastapi import FastAPI
-    
+
     app = FastAPI()
     app.add_middleware(TimeTracerMiddleware, config=config)
-    
+
     @app.get("/")
     async def root():
         return {"status": "ok", "client": "aiohttp"}
-    
+
     @app.get("/fetch-data")
     async def fetch_data():
         async with aiohttp.ClientSession() as session:
             async with session.get("https://httpbin.org/json") as resp:
                 data = await resp.json()
         return {"status": "success", "data": data}
-    
+
     @app.post("/submit")
     async def submit_data():
         async with aiohttp.ClientSession() as session:
@@ -46,7 +46,7 @@ def create_test_app(config: TraceConfig):
             ) as resp:
                 data = await resp.json()
         return {"status": "submitted", "response": data}
-    
+
     @app.post("/multi-call")
     async def multi_call():
         async with aiohttp.ClientSession() as session:
@@ -58,7 +58,7 @@ def create_test_app(config: TraceConfig):
             ) as resp2:
                 post_data = await resp2.json()
         return {"get_result": get_data, "post_result": post_data}
-    
+
     @app.get("/with-params")
     async def with_params():
         async with aiohttp.ClientSession() as session:
@@ -68,7 +68,7 @@ def create_test_app(config: TraceConfig):
             ) as resp:
                 data = await resp.json()
         return {"result": data}
-    
+
     return app
 
 
@@ -82,7 +82,7 @@ def temp_cassette_dir():
 
 class TestAiohttpRecording:
     """Test recording aiohttp calls."""
-    
+
     def test_simple_get_recorded(self, temp_cassette_dir):
         """Test that simple GET with aiohttp is recorded."""
         config = TraceConfig(
@@ -91,7 +91,7 @@ class TestAiohttpRecording:
         )
         app = create_test_app(config)
         enable_aiohttp()
-        
+
         try:
             client = TestClient(app)
             response = client.get("/fetch-data")
@@ -101,24 +101,24 @@ class TestAiohttpRecording:
             assert "data" in data
         finally:
             disable_aiohttp()
-        
+
         # Verify cassette was created
         cassettes = list(Path(temp_cassette_dir).glob("**/*.json"))
         assert len(cassettes) >= 1
-        
+
         # Verify cassette has aiohttp event
         with open(cassettes[0]) as f:
             cassette = json.load(f)
-        
+
         events = cassette.get("events", [])
         http_events = [e for e in events if e.get("type") == "http.client"]
         assert len(http_events) >= 1
-        
+
         # Check it's aiohttp
         sig = http_events[0].get("signature", {})
         assert sig.get("lib") == "aiohttp"
         assert sig.get("method") == "GET"
-    
+
     def test_post_with_body_recorded(self, temp_cassette_dir):
         """Test that POST with JSON body is recorded."""
         config = TraceConfig(
@@ -127,7 +127,7 @@ class TestAiohttpRecording:
         )
         app = create_test_app(config)
         enable_aiohttp()
-        
+
         try:
             client = TestClient(app)
             response = client.post("/submit")
@@ -136,20 +136,20 @@ class TestAiohttpRecording:
             assert data["status"] == "submitted"
         finally:
             disable_aiohttp()
-        
+
         # Verify cassette
         cassettes = list(Path(temp_cassette_dir).glob("**/*.json"))
         with open(cassettes[0]) as f:
             cassette = json.load(f)
-        
+
         events = cassette.get("events", [])
         http_events = [e for e in events if e.get("type") == "http.client"]
-        
+
         event = http_events[0]
         sig = event.get("signature", {})
         assert sig.get("method") == "POST"
         assert sig.get("body_hash") is not None  # Body was captured
-    
+
     def test_multiple_calls_recorded(self, temp_cassette_dir):
         """Test that multiple aiohttp calls are all recorded."""
         config = TraceConfig(
@@ -158,7 +158,7 @@ class TestAiohttpRecording:
         )
         app = create_test_app(config)
         enable_aiohttp()
-        
+
         try:
             client = TestClient(app)
             response = client.post("/multi-call")
@@ -168,16 +168,16 @@ class TestAiohttpRecording:
             assert "post_result" in data
         finally:
             disable_aiohttp()
-        
+
         # Verify cassette has 2 events
         cassettes = list(Path(temp_cassette_dir).glob("**/*.json"))
         with open(cassettes[0]) as f:
             cassette = json.load(f)
-        
+
         events = cassette.get("events", [])
         http_events = [e for e in events if e.get("type") == "http.client"]
         assert len(http_events) == 2  # GET + POST
-    
+
     def test_query_params_recorded(self, temp_cassette_dir):
         """Test that query parameters are recorded."""
         config = TraceConfig(
@@ -186,22 +186,22 @@ class TestAiohttpRecording:
         )
         app = create_test_app(config)
         enable_aiohttp()
-        
+
         try:
             client = TestClient(app)
             response = client.get("/with-params")
             assert response.status_code == 200
         finally:
             disable_aiohttp()
-        
+
         # Verify query params in cassette
         cassettes = list(Path(temp_cassette_dir).glob("**/*.json"))
         with open(cassettes[0]) as f:
             cassette = json.load(f)
-        
+
         events = cassette.get("events", [])
         http_events = [e for e in events if e.get("type") == "http.client"]
-        
+
         sig = http_events[0].get("signature", {})
         query = sig.get("query", {})
         assert query.get("page") == 1
@@ -210,7 +210,7 @@ class TestAiohttpRecording:
 
 class TestAiohttpReplay:
     """Test replaying aiohttp calls from cassettes."""
-    
+
     def test_replay_returns_recorded_data(self, temp_cassette_dir):
         """Test that replay returns the recorded response."""
         config = TraceConfig(
@@ -219,7 +219,7 @@ class TestAiohttpReplay:
         )
         app = create_test_app(config)
         enable_aiohttp()
-        
+
         # Record first
         try:
             client = TestClient(app)
@@ -228,11 +228,11 @@ class TestAiohttpReplay:
             recorded_data = response.json()
         finally:
             disable_aiohttp()
-        
+
         # Get the cassette path
         cassettes = list(Path(temp_cassette_dir).glob("**/*.json"))
         cassette_path = str(cassettes[0])
-        
+
         # Now replay
         replay_config = TraceConfig(
             mode=TraceMode.REPLAY,
@@ -240,13 +240,13 @@ class TestAiohttpReplay:
         )
         replay_app = create_test_app(replay_config)
         enable_aiohttp()
-        
+
         try:
             replay_client = TestClient(replay_app)
             replay_response = replay_client.get("/fetch-data")
             assert replay_response.status_code == 200
             replay_data = replay_response.json()
-            
+
             # Data should match (response from mocked aiohttp)
             assert replay_data["status"] == recorded_data["status"]
         finally:
@@ -255,7 +255,7 @@ class TestAiohttpReplay:
 
 class TestAiohttpEdgeCases:
     """Test edge cases and error handling."""
-    
+
     def test_no_external_calls(self, temp_cassette_dir):
         """Test endpoint that doesn't make external calls."""
         config = TraceConfig(
@@ -264,7 +264,7 @@ class TestAiohttpEdgeCases:
         )
         app = create_test_app(config)
         enable_aiohttp()
-        
+
         try:
             client = TestClient(app)
             response = client.get("/")
@@ -272,12 +272,12 @@ class TestAiohttpEdgeCases:
             assert response.json()["client"] == "aiohttp"
         finally:
             disable_aiohttp()
-        
+
         # Cassette should have no HTTP events
         cassettes = list(Path(temp_cassette_dir).glob("**/*.json"))
         with open(cassettes[0]) as f:
             cassette = json.load(f)
-        
+
         events = cassette.get("events", [])
         http_events = [e for e in events if e.get("type") == "http.client"]
         assert len(http_events) == 0

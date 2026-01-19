@@ -1,14 +1,13 @@
 """Tests for redaction policies."""
 
-import pytest
+from timetracer.constants import Redaction
 from timetracer.policies.redaction import (
+    detect_pii,
+    redact_body,
     redact_headers,
     redact_headers_allowlist,
-    redact_body,
-    detect_pii,
     redact_pii_in_text,
 )
-from timetracer.constants import Redaction
 
 
 class TestRedactHeaders:

@@ -1,5 +1,65 @@
 # Release Notes
 
+## v1.4.0 - Django Support + pytest Plugin (2026-01-19)
+
+### Highlights
+
+Two major features: Django integration and a pytest plugin for cassette-based testing.
+
+### Django Support
+
+Full Django middleware supporting sync and async views:
+
+```python
+# settings.py
+MIDDLEWARE = [
+    'timetracer.integrations.django.TimeTracerMiddleware',
+    # ...
+]
+
+TIMETRACER = {
+    'MODE': 'record',
+    'CASSETTE_DIR': './cassettes',
+}
+```
+
+**Features:**
+- Django 3.2 LTS and later
+- Async views (Django 4.1+)
+- Django REST Framework compatibility
+- Configuration via settings.py or environment variables
+
+**Install:**
+```bash
+pip install timetracer[django]
+```
+
+### pytest Plugin
+
+Built-in pytest fixtures for cassette-based testing:
+
+```python
+def test_external_api(timetracer_replay, client):
+    with timetracer_replay("my_test.json"):
+        response = client.get("/api/users")
+        assert response.status_code == 200
+```
+
+**Fixtures:**
+- `timetracer_replay` - Replay from recorded cassettes
+- `timetracer_record` - Record new cassettes
+- `timetracer_auto` - Auto-select based on cassette existence
+
+The plugin is auto-registered with pytest.
+
+### Documentation
+
+- Added `docs/django.md` - Django integration guide
+- Added `docs/pytest.md` - pytest plugin guide
+- Updated README with Django installation
+
+---
+
 ## v1.3.0 - aiohttp Support (2026-01-18)
 
 ### Highlights

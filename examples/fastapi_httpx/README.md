@@ -1,91 +1,77 @@
-# Timetracer FastAPI + httpx Example
+# FastAPI + httpx Example
 
-This example demonstrates using Timetracer to record and replay API calls.
+Complete example of Timetracer with FastAPI and httpx.
 
-## Setup
+## What This Shows
+
+- Recording API requests to cassettes
+- Replaying with mocked external calls
+- Using the CLI to inspect cassettes
+
+## Quick Start
+
+### 1. Install
 
 ```bash
-# From the Timetracer root directory
+pip install timetracer[fastapi,httpx]
+```
+
+### 2. Run in Record Mode
+
+```bash
 cd examples/fastapi_httpx
-
-# Create virtual environment
-python -m venv venv
-venv\Scripts\activate  # Windows
-# or: source venv/bin/activate  # Unix
-
-# Install dependencies
-pip install -e "../../[all]"
-pip install uvicorn
+TIMETRACER_MODE=record uvicorn app:app --reload
 ```
 
-## Record Mode
-
-Record real API calls to cassettes:
+### 3. Make Requests
 
 ```bash
-# Start server in record mode
-$env:TimetracerR_MODE="record"; uvicorn app:app --reload
-
-# Or on Unix:
-# TimetracerR_MODE=record uvicorn app:app --reload
-```
-
-Make some requests:
-
-```bash
-# Simple endpoint
+# Health check
 curl http://localhost:8000/
 
-# Endpoint with external API call
+# External API call (recorded)
 curl -X POST http://localhost:8000/checkout
 
-# Endpoint with path parameter
+# With path parameter
 curl http://localhost:8000/user/123
-
-# Multiple external calls
-curl -X POST http://localhost:8000/payment
 ```
 
-Check the terminal for recording output and look in `./cassettes/` for saved cassettes.
+Check `./cassettes/` for saved recordings.
 
-## Replay Mode
-
-Replay using recorded cassettes (no network calls):
+### 4. Replay
 
 ```bash
-# Find a cassette
-Timetracer list --dir ./cassettes
+# List cassettes
+timetracer list --dir ./cassettes
 
-# Start server in replay mode
-$env:TimetracerR_MODE="replay"
-$env:TimetracerR_CASSETTE="./cassettes/2026-01-15/POST__checkout__abcd1234.json"
+# Replay a cassette
+TIMETRACER_MODE=replay \
+TIMETRACER_CASSETTE=./cassettes/POST__checkout__abc123.json \
 uvicorn app:app --reload
 
 # Make the same request - external calls are mocked!
 curl -X POST http://localhost:8000/checkout
 ```
 
-## Inspect Cassettes
+## Files
 
-Use the CLI to inspect recorded cassettes:
-
-```bash
-# List recent cassettes
-Timetracer list --dir ./cassettes
-
-# Show cassette summary
-Timetracer show ./cassettes/2026-01-15/POST__checkout__abcd1234.json
-
-# Show with event details
-Timetracer show ./cassettes/2026-01-15/POST__checkout__abcd1234.json --events
-```
+| File | Description |
+|------|-------------|
+| `app.py` | FastAPI app with httpx calls |
+| `test_integration.py` | Integration tests |
+| `cassettes/` | Saved recordings |
 
 ## Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `TimetracerR_MODE` | `off`, `record`, or `replay` |
-| `TimetracerR_DIR` | Cassette output directory |
-| `TimetracerR_CASSETTE` | Specific cassette for replay |
-| `TimetracerR_SAMPLE_RATE` | 0.0-1.0, fraction of requests to record |
-| `TimetracerR_ERRORS_ONLY` | `true` to only record error responses |
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `TIMETRACER_MODE` | off | `record`, `replay`, or `off` |
+| `TIMETRACER_DIR` | ./cassettes | Where to save cassettes |
+| `TIMETRACER_CASSETTE` | - | Cassette file for replay |
+| `TIMETRACER_SAMPLE_RATE` | 1.0 | Record only X% of requests |
+
+## Run Tests
+
+```bash
+pytest test_integration.py -v
+```

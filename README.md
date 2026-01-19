@@ -70,6 +70,7 @@ Or install only what you need:
 pip install timetracer[fastapi,httpx]    # FastAPI + httpx
 pip install timetracer[fastapi,aiohttp]  # FastAPI + aiohttp
 pip install timetracer[flask,requests]   # Flask + requests
+pip install timetracer[django,requests]  # Django + requests
 ```
 
 ---
@@ -159,11 +160,12 @@ All settings are controlled via environment variables:
 
 | Category | Supported |
 |----------|-----------|
-| **Frameworks** | FastAPI, Flask |
+| **Frameworks** | FastAPI, Flask, Django |
 | **HTTP Clients** | httpx, requests, aiohttp |
 | **Databases** | SQLAlchemy |
 | **Cache** | Redis |
 | **Storage** | Local filesystem, AWS S3 |
+| **Testing** | pytest plugin with fixtures |
 | **Tools** | CLI, diff engine, HTML timeline, **Dashboard** |
 
 ---

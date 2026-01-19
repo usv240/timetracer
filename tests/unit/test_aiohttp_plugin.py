@@ -10,8 +10,9 @@ class TestEnableDisable:
 
     def test_enable_aiohttp(self):
         """Test enabling aiohttp plugin."""
-        from timetracer.plugins import enable_aiohttp, disable_aiohttp
         import aiohttp
+
+        from timetracer.plugins import disable_aiohttp, enable_aiohttp
 
         original = aiohttp.ClientSession._request
 
@@ -23,7 +24,7 @@ class TestEnableDisable:
 
     def test_enable_twice_is_safe(self):
         """Test that enabling twice doesn't break anything."""
-        from timetracer.plugins import enable_aiohttp, disable_aiohttp
+        from timetracer.plugins import disable_aiohttp, enable_aiohttp
 
         enable_aiohttp()
         enable_aiohttp()  # Should not raise
@@ -123,8 +124,9 @@ class TestMockResponse:
     @pytest.mark.asyncio
     async def test_read(self):
         """Test reading response body."""
-        from timetracer.plugins.aiohttp_plugin import _MockClientResponse
         from yarl import URL
+
+        from timetracer.plugins.aiohttp_plugin import _MockClientResponse
 
         response = _MockClientResponse(
             method="GET",
@@ -140,8 +142,9 @@ class TestMockResponse:
     @pytest.mark.asyncio
     async def test_text(self):
         """Test reading response as text."""
-        from timetracer.plugins.aiohttp_plugin import _MockClientResponse
         from yarl import URL
+
+        from timetracer.plugins.aiohttp_plugin import _MockClientResponse
 
         response = _MockClientResponse(
             method="GET",
@@ -157,8 +160,9 @@ class TestMockResponse:
     @pytest.mark.asyncio
     async def test_json(self):
         """Test reading response as JSON."""
-        from timetracer.plugins.aiohttp_plugin import _MockClientResponse
         from yarl import URL
+
+        from timetracer.plugins.aiohttp_plugin import _MockClientResponse
 
         response = _MockClientResponse(
             method="GET",
@@ -173,8 +177,9 @@ class TestMockResponse:
 
     def test_status_and_ok(self):
         """Test status code and ok property."""
-        from timetracer.plugins.aiohttp_plugin import _MockClientResponse
         from yarl import URL
+
+        from timetracer.plugins.aiohttp_plugin import _MockClientResponse
 
         response_ok = _MockClientResponse(
             method="GET",
@@ -199,8 +204,9 @@ class TestMockResponse:
     def test_raise_for_status(self):
         """Test raise_for_status method."""
         import aiohttp
-        from timetracer.plugins.aiohttp_plugin import _MockClientResponse
         from yarl import URL
+
+        from timetracer.plugins.aiohttp_plugin import _MockClientResponse
 
         response = _MockClientResponse(
             method="GET",
@@ -216,8 +222,9 @@ class TestMockResponse:
     @pytest.mark.asyncio
     async def test_context_manager(self):
         """Test async context manager."""
-        from timetracer.plugins.aiohttp_plugin import _MockClientResponse
         from yarl import URL
+
+        from timetracer.plugins.aiohttp_plugin import _MockClientResponse
 
         response = _MockClientResponse(
             method="GET",
@@ -233,8 +240,9 @@ class TestMockResponse:
 
     def test_headers(self):
         """Test headers property."""
-        from timetracer.plugins.aiohttp_plugin import _MockClientResponse
         from yarl import URL
+
+        from timetracer.plugins.aiohttp_plugin import _MockClientResponse
 
         response = _MockClientResponse(
             method="GET",

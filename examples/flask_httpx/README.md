@@ -1,38 +1,67 @@
 # Flask + httpx Example
 
-This example demonstrates Timetracer with Flask and httpx.
+Complete example of Timetracer with Flask and httpx.
 
-## Setup
+## Quick Start
+
+### 1. Install
 
 ```bash
-pip install Timetracer[flask,httpx]
+pip install timetracer[flask,httpx]
 ```
 
-## Run in Record Mode
+### 2. Run in Record Mode
 
 ```bash
-TimetracerR_MODE=record TimetracerR_DIR=./cassettes python app.py
+cd examples/flask_httpx
+TIMETRACER_MODE=record python app.py
 ```
 
-Then make requests:
+### 3. Make Requests
+
 ```bash
+# Weather endpoint (external API call)
 curl http://localhost:5000/weather/london
+
+# Checkout endpoint (external API call)
 curl -X POST http://localhost:5000/checkout
 ```
 
-Cassettes will be saved to `./cassettes/`.
+Check `./cassettes/` for saved recordings.
 
-## Run in Replay Mode
+### 4. Replay
 
 ```bash
-TimetracerR_MODE=replay TimetracerR_CASSETTE=./cassettes/.../GET__weather.json python app.py
+# List cassettes
+timetracer list --dir ./cassettes
+
+# Replay
+TIMETRACER_MODE=replay \
+TIMETRACER_CASSETTE=./cassettes/GET__weather__abc123.json \
+python app.py
+
+# Same request - external calls mocked!
+curl http://localhost:5000/weather/london
 ```
 
-The httpx calls will be mocked from the cassette - no network requests made!
+## Files
 
-## Features Demonstrated
+| File | Description |
+|------|-------------|
+| `app.py` | Flask app with httpx calls |
+| `cassettes/` | Saved recordings |
 
-- Flask middleware integration
-- httpx outbound call recording
-- Deterministic replay with mocked dependencies
-- Terminal summaries
+## How It Works
+
+1. **Middleware** wraps Flask's WSGI app
+2. **httpx plugin** intercepts outbound HTTP calls
+3. **Record mode** saves everything to JSON cassettes
+4. **Replay mode** mocks external calls from cassettes
+
+## Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `TIMETRACER_MODE` | off | `record`, `replay`, or `off` |
+| `TIMETRACER_DIR` | ./cassettes | Where to save cassettes |
+| `TIMETRACER_CASSETTE` | - | Cassette file for replay |

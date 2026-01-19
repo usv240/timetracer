@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "timetracer"
-version = "1.3.0"
+version = "1.4.0"
 description = "Time-travel debugging for FastAPI and Flask - record API cassettes, replay with mocked dependencies"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
     {name = "Timetracer Contributors"}
 ]
-keywords = ["fastapi", "flask", "debugging", "testing", "api", "replay", "mocking", "cassette"]
+keywords = ["fastapi", "flask", "django", "debugging", "testing", "pytest", "api", "replay", "mocking", "cassette"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -54,8 +54,11 @@ redis = [
 s3 = [
     "boto3>=1.26.0",
 ]
+django = [
+    "django>=3.2",
+]
 all = [
-    "timetracer[fastapi,flask,httpx,aiohttp,requests,sqlalchemy,redis,s3]",
+    "timetracer[fastapi,flask,django,httpx,aiohttp,requests,sqlalchemy,redis,s3]",
 ]
 dev = [
     "timetracer[all]",
@@ -68,6 +71,9 @@ dev = [
 
 [project.scripts]
 timetracer = "timetracer.cli.main:main"
+
+[project.entry-points.pytest11]
+timetracer = "timetracer.pytest_plugin"
 
 [project.urls]
 Homepage = "https://github.com/usv240/timetracer"

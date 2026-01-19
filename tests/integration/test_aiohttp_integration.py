@@ -4,7 +4,6 @@ Integration test for aiohttp plugin.
 Tests the full record/replay flow with a real FastAPI app.
 """
 
-import asyncio
 import json
 import shutil
 import tempfile
@@ -16,7 +15,7 @@ from fastapi.testclient import TestClient
 
 from timetracer.config import TraceConfig, TraceMode
 from timetracer.integrations.fastapi import TimeTraceMiddleware
-from timetracer.plugins import enable_aiohttp, disable_aiohttp
+from timetracer.plugins import disable_aiohttp, enable_aiohttp
 
 
 def create_test_app(config: TraceConfig) -> FastAPI:

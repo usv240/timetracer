@@ -1,6 +1,6 @@
 # Hybrid Replay Example
 
-This example demonstrates hybrid replay - mocking external APIs while keeping other dependencies live.
+Mock external APIs while keeping other dependencies live.
 
 ## Scenario
 

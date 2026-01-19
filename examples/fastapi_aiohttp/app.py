@@ -54,7 +54,7 @@ async def fetch_data():
     async with aiohttp.ClientSession() as session:
         async with session.get("https://httpbin.org/json") as resp:
             data = await resp.json()
-    
+
     return {
         "status": "success",
         "data": data,
@@ -71,7 +71,7 @@ async def get_user(user_id: str):
     async with aiohttp.ClientSession() as session:
         async with session.get(f"https://httpbin.org/anything/user/{user_id}") as resp:
             data = await resp.json()
-    
+
     return {
         "user_id": user_id,
         "data": data,
@@ -91,7 +91,7 @@ async def submit_data():
             json={"action": "submit", "value": 42},
         ) as resp:
             data = await resp.json()
-    
+
     return {
         "status": "submitted",
         "response": data,
@@ -109,14 +109,14 @@ async def multi_call():
         # Call 1: Get data
         async with session.get("https://httpbin.org/get") as resp1:
             get_data = await resp1.json()
-        
+
         # Call 2: Post data
         async with session.post(
             "https://httpbin.org/post",
             json={"from_get": get_data.get("origin")},
         ) as resp2:
             post_data = await resp2.json()
-    
+
     return {
         "get_result": get_data,
         "post_result": post_data,
@@ -139,7 +139,7 @@ async def with_headers():
             },
         ) as resp:
             data = await resp.json()
-    
+
     return {"headers_echo": data}
 
 
@@ -156,5 +156,5 @@ async def with_params():
             params={"page": 1, "limit": 10, "filter": "active"},
         ) as resp:
             data = await resp.json()
-    
+
     return {"result": data}
