@@ -13,6 +13,7 @@ from dataclasses import dataclass, field
 
 from timetracer.constants import (
     CapturePolicy,
+    CompressionType,
     Defaults,
     EnvVars,
     TraceMode,
@@ -89,6 +90,9 @@ class TraceConfig:
     # Logging
     log_level: str = Defaults.LOG_LEVEL
 
+    # Compression - gzip cassettes for smaller storage
+    compression: CompressionType = Defaults.COMPRESSION
+
     def __post_init__(self) -> None:
         """Validate configuration after initialization."""
         # Convert string mode to enum if needed
@@ -128,6 +132,16 @@ class TraceConfig:
             raise ConfigurationError(
                 f"max_body_kb must be non-negative, got {self.max_body_kb}"
             )
+
+        # Convert string compression to enum if needed
+        if isinstance(self.compression, str):
+            try:
+                self.compression = CompressionType(self.compression.lower())
+            except ValueError:
+                raise ConfigurationError(
+                    f"Invalid compression: {self.compression}. "
+                    f"Must be one of: {[c.value for c in CompressionType]}"
+                )
 
     @classmethod
     def from_env(cls) -> TraceConfig:
@@ -193,6 +207,10 @@ class TraceConfig:
         if live_plugins := os.environ.get(EnvVars.LIVE_PLUGINS):
             kwargs["live_plugins"] = _parse_csv(live_plugins)
 
+        # Compression
+        if compression := os.environ.get(EnvVars.COMPRESSION):
+            kwargs["compression"] = compression
+
         return cls(**kwargs)
 
     def with_env_overrides(self) -> TraceConfig:
@@ -221,6 +239,7 @@ class TraceConfig:
             log_level=env_config.log_level if os.environ.get(EnvVars.LOG_LEVEL) else self.log_level,
             mock_plugins=env_config.mock_plugins if os.environ.get(EnvVars.MOCK_PLUGINS) else self.mock_plugins,
             live_plugins=env_config.live_plugins if os.environ.get(EnvVars.LIVE_PLUGINS) else self.live_plugins,
+            compression=env_config.compression if os.environ.get(EnvVars.COMPRESSION) else self.compression,
         )
 
     def should_trace(self, path: str) -> bool:

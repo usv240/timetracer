@@ -1,155 +1,111 @@
 # Timetracer Roadmap
 
-Based on user feedback from r/FastAPI and feature requests.
+Based on user feedback from r/FastAPI, r/Django, and GitHub issues.
 
 ---
 
-## Completed in v1.3.0
+## Completed Milestones
 
-- aiohttp plugin (full support)
-- S3 integration documentation
-- CI/CD integration guide (ArgoWorkflows, GitHub Actions)
-- FastAPI + aiohttp example project
+### ✅ v1.5.0
+- **Cassette Compression**: Gzip compression support (60-95% size reduction).
+- **MongoDB/Motor Plugin**: Async MongoDB support (find, insert, update, delete).
 
----
+### ✅ v1.4.0
+- **Django Integration**: Full middleware support (Sync/Async).
+- **pytest Plugin**: Zero-config fixtures (`timetracer_replay`, etc).
+- **Documentation**: Unified guides for all frameworks.
 
-## Priority 1: Additional HTTP Client Plugins
-
-| Client | Popularity | Difficulty | Status |
-|--------|------------|------------|--------|
-| httpx | Very High | Done | Complete |
-| requests | Very High | Done | Complete |
-| aiohttp | High | Done | Complete |
-| urllib3 | Medium | Medium | Planned |
+### ✅ v1.3.0
+- **aiohttp Plugin**: Fully supported.
+- **S3 Integration**: Remote cassette storage.
+- **CI/CD Guides**: ArgoWorkflows, GitHub Actions.
 
 ---
 
-## Priority 2: Async Database Plugins
+## Priority 1: Async Database Support
 
-| Database | Current Support | Notes |
-|----------|-----------------|-------|
-| SQLAlchemy | Complete | Sync + some async |
-| asyncpg | Planned | Native PostgreSQL async |
-| aiomysql | Planned | MySQL async |
-| motor | Planned | MongoDB async |
-| Tortoise ORM | Planned | Popular async ORM |
+Modern Python frameworks (FastAPI, Litestar, Django 4+) heavily use async database drivers. We need to support them natively.
 
----
-
-## Priority 3: Async Cache Support
-
-| Service | Current Support | Notes |
-|---------|-----------------|-------|
-| Redis (sync) | Complete | redis-py |
-| Redis (async) | Planned | redis.asyncio |
-| Memcached | Planned | pymemcache |
+| Driver | Status | Notes |
+|--------|--------|-------|
+| **SQLAlchemy (Sync)** | ✅ Done | Reference implementation |
+| **SQLAlchemy (Async)** | 🚧 In Progress | asyncpg/aiomysql via SQLA |
+| **asyncpg** | Planned | Native PostgreSQL async |
+| **Motor** | ✅ Done | MongoDB async |
+| **Tortoise ORM** | Planned | Popular async ORM |
 
 ---
 
-## Priority 4: Framework Integrations
+## Priority 2: Advanced Data Handling
 
-| Framework | Current Support | Notes |
-|-----------|-----------------|-------|
-| FastAPI | Complete | Middleware + auto_setup |
-| Flask | Complete | Middleware |
-| Starlette | Complete | Via FastAPI |
-| Django | Planned | High demand |
-| Litestar | Planned | Growing popularity |
-
----
-
-## Priority 5: Testing Integrations
-
-### pytest-timetracer
-
-```python
-@pytest.mark.cassette("checkout_flow.json")
-def test_checkout():
-    response = client.post("/checkout")
-    assert response.status_code == 200
-```
-
-Features:
-- Auto-generate cassettes from first run
-- Compare responses between runs
-- Cassette directory per test module
-
----
-
-## Priority 6: Developer Experience
-
-### CLI Improvements
-- `timetracer watch` - Live tail of new cassettes
-- `timetracer compare` - Better diff output
-- `timetracer clean` - Remove old/duplicate cassettes
-- `timetracer validate` - Check cassette schema
-
-### Dashboard Improvements
-- Real-time WebSocket updates
-- Cassette comparison view
-- Request grouping by session/trace ID
-
----
-
-## Priority 7: Advanced Features
+As adoption grows, users need more control over sensitive data and complex request types.
 
 ### GraphQL Support
-- Parse GraphQL queries
-- Match by operation name, not just URL
-- Variable extraction and comparison
-
-### Request Diffing
-```bash
-timetracer diff --a baseline.json --b current.json --format html
-```
-- Side-by-side response comparison
-- Highlight changes in body, headers, timing
+- Parse GraphQL queries (currently treated as generic POST requests)
+- Match by operation name/variables
+- Schema-aware redaction
 
 ### Cassette Encryption
-- Encrypt cassettes at rest
-- Key management via environment or vault
+- Encrypt cassettes at rest (AES-GCM)
+- Key management via environment variables
+- Safe to commit encrypted cassettes to public repos
+
+### Request Diffing & Comparison
+- `timetracer diff` command
+- Compare a failed replay against the recorded baseline
+- Highlight why a match failed (header mismatch? body drift?)
 
 ---
 
-## Release Plan
+## Priority 3: Developer Experience
 
-### v1.4.0
-- Django middleware
-- asyncpg plugin
-- Request diffing improvements
+### VS Code Extension
+- "Record/Replay" buttons directly in the editor
+- Cassette explorer in the side panel
+- Click-to-open cassette JSON
 
-### v1.5.0
-- GraphQL support
-- Cassette encryption
+### CLI Enhancements
+- `timetracer watch`: Live tail of new cassettes
+- `timetracer clean`: Smart cleanup of unused/expired cassettes
+- `timetracer validate`: Schema validation
 
-### v2.0.0
-- Full pytest integration
-- VS Code extension
+---
+
+## Future Frameworks
+
+| Framework | Status | Notes |
+|-----------|--------|-------|
+| **FastAPI** | ✅ Done | |
+| **Flask** | ✅ Done | |
+| **Django** | ✅ Done | |
+| **Litestar** | Planned | Growing popularity |
+| **Starlette** | Planned | Native integration |
 
 ---
 
 ## Contribution Opportunities
 
+We love contributions! Here are some areas where you can help:
+
 **Good first issues:**
-- Add more PII patterns to redaction
-- Improve CLI help text
-- Add more cassette validation
+- Add more PII patterns to `detect_pii()`
+- Improve CLI help text and error messages
+- Add specific tech stack examples (e.g., "FastAPI + Celery")
 
 **Medium difficulty:**
-- pytest fixture
-- Django middleware
+- Add a new database plugin (e.g., PyMongo)
+- Improve the Dashboard UI (HTML/JS)
 
 **Larger projects:**
-- GraphQL parser
-- VS Code extension
+- GraphQL parser integration
+- VS Code Extension
 
 ---
 
-## Notes
+## Vision
 
 Key differentiators of Timetracer vs VCR.py/Betamax:
-1. Multi-dependency capture (HTTP + DB + Redis in one cassette)
-2. Production-first (middleware, not just test decorators)
-3. Built-in dashboard and visualization
-4. S3 cloud storage
-5. Advanced redaction for PII
+1. **Full Stack Capture**: HTTP + DB + Redis in one cassette.
+2. **Production-First**: Designed as middleware for live apps, not just test decorators.
+3. **Visualization**: Built-in dashboard and timeline view.
+4. **Cloud Native**: S3 storage and Kubernetes operational modes.

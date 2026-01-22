@@ -46,12 +46,24 @@ except ImportError:
     def disable_redis(*args, **kwargs):
         pass
 
+# Motor (async MongoDB) is optional - only import if available
+try:
+    from timetracer.plugins.motor_plugin import disable_motor, enable_motor
+    _HAS_MOTOR = True
+except ImportError:
+    _HAS_MOTOR = False
+
+    def enable_motor(*args, **kwargs):
+        raise ImportError("motor is required. Install with: pip install motor")
+
+    def disable_motor(*args, **kwargs):
+        pass
+
 __all__ = [
     "enable_httpx", "disable_httpx",
     "enable_requests", "disable_requests",
     "enable_aiohttp", "disable_aiohttp",
     "enable_sqlalchemy", "disable_sqlalchemy",
     "enable_redis", "disable_redis",
+    "enable_motor", "disable_motor",
 ]
-
-

@@ -1,5 +1,163 @@
 # Release Notes
 
+## v1.5.0 - Compression + Motor/MongoDB Support (2026-01-22)
+
+### Highlights
+
+Two major features that significantly enhance Timetracer's capabilities: **cassette compression** for reduced storage costs and **Motor/MongoDB** plugin for async database support.
+
+### Cassette Compression
+
+Gzip compression support with automatic size reduction of 60-95%:
+
+```bash
+# Enable compression via environment variable
+export TIMETRACER_COMPRESSION=gzip
+TIMETRACER_MODE=record uvicorn app:app
+
+# Or via code
+from timetracer import TraceConfig, CompressionType
+
+config = TraceConfig(
+    mode="record",
+    compression=CompressionType.GZIP,
+)
+```
+
+**Features:**
+- **60-95% size reduction** - Tested with real-world cassettes
+- **Transparent read** - Auto-detection of `.json.gz` files
+- **Zero config replay** - Replay works seamlessly with compressed cassettes
+- **Environment variable control** - `TIMETRACER_COMPRESSION=gzip` or `none`
+- **File extension support** - `.json` for uncompressed, `.json.gz` for compressed
+
+**Benefits:**
+- Smaller git repositories with committed cassettes
+- Faster CI/CD artifact upload/download
+- Reduced storage costs for large test suites
+- Safe to commit compressed cassettes to public repos
+
+**Example:**
+```bash
+# Uncompressed: 44,662 bytes
+# Compressed:    1,915 bytes (95.7% reduction)
+timetracer dashboard --dir ./cassettes --open
+```
+
+**Install:**
+```bash
+pip install timetracer  # Compression included in core package
+```
+
+### Motor/MongoDB Plugin
+
+Full async MongoDB support via the Motor driver:
+
+```python
+from motor.motor_asyncio import AsyncIOMotorClient
+from timetracer.plugins import enable_motor
+
+enable_motor()
+
+client = AsyncIOMotorClient("mongodb://localhost:27017")
+db = client.mydb
+
+# These operations are automatically captured
+await db.users.insert_one({"name": "Alice", "age": 30})
+user = await db.users.find_one({"name": "Alice"})
+```
+
+**Supported Operations:**
+- `find_one` - Single document query
+- `insert_one` / `insert_many` - Document insertion
+- `update_one` / `update_many` - Document updates
+- `delete_one` / `delete_many` - Document deletion
+- `count_documents` - Count operations
+- `aggregate` - Aggregation pipelines
+- `find` - Cursor creation
+
+**Features:**
+- Full async/await support
+- Automatic ObjectId serialization
+- DateTime handling
+- Sensitive field redaction (password, token, etc.)
+- Error capture and replay
+- Integration with pytest fixtures
+
+**Cassette Format:**
+```json
+{
+  "events": [
+    {
+      "type": "db.query",
+      "signature": {
+        "lib": "motor",
+        "method": "FIND_ONE",
+        "url": "mydb.users"
+      },
+      "result": {
+        "status": 0,
+        "body": {
+          "data": {"_id": "...", "name": "Alice", "age": 30}
+        }
+      },
+      "duration_ms": 2.5
+    }
+  ]
+}
+```
+
+**Install:**
+```bash
+pip install timetracer[motor]
+```
+
+### Testing & Quality
+
+All features have been thoroughly tested:
+- ✅ **149/149 tests passing** (100% success rate)
+- ✅ Compression tests: 3/3 passing
+- ✅ Motor plugin tests: 13/13 passing
+- ✅ Integration examples for all features
+- ✅ Performance benchmarks included
+
+### Documentation
+
+New documentation added:
+- `docs/compression.md` - Comprehensive compression guide
+- `docs/motor.md` - Motor/MongoDB integration guide
+- `examples/compression_example/` - Full compression example with comparison script
+- `examples/motor_mongodb/` - Motor integration example
+
+Updated documentation:
+- README.md - Added compression and Motor features
+- ROADMAP.md - Marked compression and Motor as completed
+- Configuration reference - Added `TIMETRACER_COMPRESSION` variable
+
+### Bug Fixes
+
+- Fixed Windows path escaping in dashboard JavaScript
+- Improved error messages for missing cassettes
+- Enhanced serialization for MongoDB data types
+
+### Breaking Changes
+
+None. This release is fully backward compatible.
+
+### Migration Guide
+
+No migration needed. Existing cassettes continue to work. To enable compression for new recordings:
+
+```bash
+# Option 1: Environment variable
+export TIMETRACER_COMPRESSION=gzip
+
+# Option 2: Code configuration
+config = TraceConfig(compression=CompressionType.GZIP)
+```
+
+---
+
 ## v1.4.0 - Django Support + pytest Plugin (2026-01-19)
 
 ### Highlights

@@ -32,6 +32,15 @@ class CapturePolicy(str, Enum):
     ON_ERROR = "on_error"
     ALWAYS = "always"
 
+
+# =============================================================================
+# COMPRESSION TYPE
+# =============================================================================
+class CompressionType(str, Enum):
+    """Compression type for cassette files."""
+    NONE = "none"
+    GZIP = "gzip"
+
 # =============================================================================
 # EVENT TYPES - centralized so plugins use consistent naming
 # =============================================================================
@@ -59,6 +68,7 @@ class Defaults:
     STRICT_REPLAY: bool = True
     LOG_LEVEL: str = "info"
     EXCLUDE_PATHS: tuple[str, ...] = ("/health", "/metrics", "/docs", "/openapi.json")
+    COMPRESSION: CompressionType = CompressionType.NONE
 
 # =============================================================================
 # REDACTION CONSTANTS - headers to always remove
@@ -271,6 +281,7 @@ class EnvVars:
     LOG_LEVEL: str = "TIMETRACER_LOG_LEVEL"
     MOCK_PLUGINS: str = "TIMETRACER_MOCK_PLUGINS"
     LIVE_PLUGINS: str = "TIMETRACER_LIVE_PLUGINS"
+    COMPRESSION: str = "TIMETRACER_COMPRESSION"
 
 # =============================================================================
 # ALLOWED HEADERS - headers we keep (allow-list approach for outbound)

@@ -2,17 +2,19 @@
 Cassette I/O - reading and writing cassette files.
 
 Handles serialization, deserialization, and file management.
+Supports gzip compression for smaller storage.
 """
 
 from __future__ import annotations
 
+import gzip
 import json
 from dataclasses import asdict
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from timetracer.cassette.naming import cassette_filename, get_date_directory
-from timetracer.constants import SCHEMA_VERSION, EventType
+from timetracer.constants import SCHEMA_VERSION, CompressionType, EventType
 from timetracer.exceptions import CassetteNotFoundError, CassetteSchemaError
 from timetracer.types import (
     AppliedPolicies,
@@ -52,10 +54,11 @@ def write_cassette(session: TraceSession, config: TraceConfig) -> str:
     Write a trace session to a cassette file.
 
     Creates date-based subdirectory and uses standardized naming.
+    Supports gzip compression when config.compression is set to GZIP.
 
     Args:
         session: The completed trace session.
-        config: Configuration for cassette directory.
+        config: Configuration for cassette directory and compression.
 
     Returns:
         Absolute path to the written cassette file.
@@ -77,13 +80,24 @@ def write_cassette(session: TraceSession, config: TraceConfig) -> str:
     route = cassette.request.route_template or cassette.request.path or "unknown"
     filename = cassette_filename(method, route, session.session_id)
 
+    # Add .gz extension if using gzip compression
+    if config.compression == CompressionType.GZIP:
+        filename = filename + ".gz"
+
     file_path = date_dir / filename
 
     # Serialize and write
     cassette_dict = _cassette_to_dict(cassette)
+    json_content = json.dumps(cassette_dict, indent=2, cls=CassetteEncoder)
 
-    with open(file_path, "w", encoding="utf-8") as f:
-        json.dump(cassette_dict, f, indent=2, cls=CassetteEncoder)
+    if config.compression == CompressionType.GZIP:
+        # Write gzip compressed
+        with gzip.open(file_path, "wt", encoding="utf-8") as f:
+            f.write(json_content)
+    else:
+        # Write uncompressed
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(json_content)
 
     return str(file_path)
 
@@ -92,8 +106,10 @@ def read_cassette(path: str) -> Cassette:
     """
     Read a cassette from file.
 
+    Automatically detects gzip compression by file extension (.json.gz).
+
     Args:
-        path: Path to the cassette file.
+        path: Path to the cassette file (.json or .json.gz).
 
     Returns:
         Loaded Cassette object.
@@ -109,8 +125,15 @@ def read_cassette(path: str) -> Cassette:
     if not file_path.exists():
         raise CassetteNotFoundError(path)
 
-    with open(file_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    # Auto-detect gzip by file extension
+    is_gzip = file_path.suffix == ".gz" or str(file_path).endswith(".json.gz")
+
+    if is_gzip:
+        with gzip.open(file_path, "rt", encoding="utf-8") as f:
+            data = json.load(f)
+    else:
+        with open(file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
 
     # Validate schema version
     schema_version = data.get("schema_version")

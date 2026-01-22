@@ -18,6 +18,7 @@ Complete reference for all Timetracer configuration options.
 |--------|------|---------|-------------|
 | `cassette_dir` | `str` | `./cassettes` | Directory for cassette files |
 | `cassette_path` | `str` | `None` | Specific cassette for replay mode |
+| `compression` | `CompressionType` | `none` | Compression format: `none`, `gzip` |
 
 ### Capture Control
 
@@ -66,6 +67,7 @@ All options can be set via environment variables with the `TIMETRACER_` prefix:
 | `TIMETRACER_ENV` | `env` |
 | `TIMETRACER_DIR` | `cassette_dir` |
 | `TIMETRACER_CASSETTE` | `cassette_path` |
+| `TIMETRACER_COMPRESSION` | `compression` |
 | `TIMETRACER_CAPTURE` | `capture` (comma-separated) |
 | `TIMETRACER_SAMPLE_RATE` | `sample_rate` |
 | `TIMETRACER_ERRORS_ONLY` | `errors_only` |

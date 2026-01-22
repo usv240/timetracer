@@ -297,6 +297,10 @@ def _enable_plugins(plugins: list[str]) -> list[str]:
                 from timetracer.plugins import enable_redis
                 enable_redis()
                 enabled.append("redis")
+            elif plugin == "motor":
+                from timetracer.plugins import enable_motor
+                enable_motor()
+                enabled.append("motor")
         except ImportError:
             pass  # Plugin not available
     return enabled
@@ -321,6 +325,9 @@ def _disable_plugins(plugins: list[str]) -> None:
             elif plugin == "redis":
                 from timetracer.plugins import disable_redis
                 disable_redis()
+            elif plugin == "motor":
+                from timetracer.plugins import disable_motor
+                disable_motor()
         except (ImportError, Exception):
             pass
 

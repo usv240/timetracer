@@ -71,6 +71,7 @@ pip install timetracer[fastapi,httpx]    # FastAPI + httpx
 pip install timetracer[fastapi,aiohttp]  # FastAPI + aiohttp
 pip install timetracer[flask,requests]   # Flask + requests
 pip install timetracer[django,requests]  # Django + requests
+pip install timetracer[motor]            # Motor (MongoDB)
 ```
 
 ---
@@ -151,6 +152,7 @@ All settings are controlled via environment variables:
 | `TIMETRACER_CASSETTE` | Path to cassette file (replay mode) | — |
 | `TIMETRACER_SAMPLE_RATE` | Fraction of requests to record (0-1) | `1.0` |
 | `TIMETRACER_ERRORS_ONLY` | Only record error responses | `false` |
+| `TIMETRACER_COMPRESSION` | Cassette compression: `none`, `gzip` | `none` |
 | `TIMETRACER_MOCK_PLUGINS` | Plugins to mock during replay | all |
 | `TIMETRACER_LIVE_PLUGINS` | Plugins to keep live during replay | none |
 
@@ -162,11 +164,12 @@ All settings are controlled via environment variables:
 |----------|-----------|
 | **Frameworks** | FastAPI, Flask, Django |
 | **HTTP Clients** | httpx, requests, aiohttp |
-| **Databases** | SQLAlchemy |
+| **Databases** | SQLAlchemy, Motor (MongoDB) |
 | **Cache** | Redis |
 | **Storage** | Local filesystem, AWS S3 |
 | **Testing** | pytest plugin with fixtures |
 | **Tools** | CLI, diff engine, HTML timeline, **Dashboard** |
+| **Compression** | Gzip (60-95% size reduction) |
 
 ---
 
@@ -217,13 +220,19 @@ Timetracer automatically protects sensitive data:
 
 ## Documentation
 
+- [Changelog](CHANGELOG.md) - Version history and changes
+- [Release Notes](RELEASE_NOTES.md) - Detailed release information
 - [Why Timetracer?](docs/why-timetracer.md)
 - [Quick Start Guide](docs/quickstart.md)
 - [Configuration Reference](docs/configuration.md)
 - [Dashboard Guide](docs/dashboard.md)
 - [Plugin Guide](docs/plugins.md)
 - [SQLAlchemy Integration](docs/sqlalchemy.md)
+- [Motor (MongoDB) Integration](docs/motor.md)
 - [Flask Integration](docs/flask.md)
+- [Django Integration](docs/django.md)
+- [pytest Plugin](docs/pytest.md)
+- [Cassette Compression](docs/compression.md)
 - [S3 Storage](docs/s3-storage.md)
 - [Cassette Search](docs/search.md)
 - [Security Best Practices](docs/security.md)

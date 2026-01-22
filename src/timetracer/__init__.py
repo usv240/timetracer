@@ -6,7 +6,7 @@ with mocked dependencies for deterministic debugging.
 """
 
 from timetracer.config import TraceConfig
-from timetracer.constants import CapturePolicy, TraceMode
+from timetracer.constants import CapturePolicy, CompressionType, TraceMode
 from timetracer.exceptions import (
     CassetteError,
     CassetteNotFoundError,
@@ -21,6 +21,7 @@ __all__ = [
     "TraceConfig",
     "TraceMode",
     "CapturePolicy",
+    "CompressionType",
     "TimetracerError",
     "ReplayMismatchError",
     "CassetteError",
