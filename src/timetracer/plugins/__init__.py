@@ -59,6 +59,19 @@ except ImportError:
     def disable_motor(*args, **kwargs):
         pass
 
+# PyMongo (sync MongoDB) is optional - only import if available
+try:
+    from timetracer.plugins.pymongo_plugin import disable_pymongo, enable_pymongo
+    _HAS_PYMONGO = True
+except ImportError:
+    _HAS_PYMONGO = False
+
+    def enable_pymongo(*args, **kwargs):
+        raise ImportError("pymongo is required. Install with: pip install pymongo")
+
+    def disable_pymongo(*args, **kwargs):
+        pass
+
 __all__ = [
     "enable_httpx", "disable_httpx",
     "enable_requests", "disable_requests",
@@ -66,4 +79,5 @@ __all__ = [
     "enable_sqlalchemy", "disable_sqlalchemy",
     "enable_redis", "disable_redis",
     "enable_motor", "disable_motor",
+    "enable_pymongo", "disable_pymongo",
 ]
