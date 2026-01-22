@@ -15,7 +15,6 @@ Usage:
 from __future__ import annotations
 
 import time
-from functools import wraps
 from typing import TYPE_CHECKING, Any, Callable
 
 from timetracer.constants import EventType
@@ -572,6 +571,7 @@ def _make_signature(
 def _safe_serialize(doc: Any) -> str:
     """Safely serialize a MongoDB document to string."""
     import json
+
     from bson import ObjectId
 
     def default_serializer(obj: Any) -> Any:
