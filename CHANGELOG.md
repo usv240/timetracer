@@ -5,6 +5,31 @@ All notable changes to Timetracer will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - v1.6.0
+
+### Added
+- **PyMongo Plugin**: Synchronous MongoDB support
+  - Support for all CRUD operations: `find_one`, `insert_one`, `update_one`, `delete_one`, etc.
+  - Support for `insert_many`, `update_many`, `delete_many`, `replace_one`
+  - Support for `count_documents` and `aggregate` pipelines
+  - Automatic ObjectId and DateTime serialization
+  - Perfect for Flask apps, Django sync views, ETL scripts
+  - Integration with pytest fixtures
+- **New Examples**:
+  - `examples/pymongo_flask_app/` - Flask + PyMongo integration example
+- **New Documentation**:
+  - `docs/pymongo.md` - Comprehensive PyMongo guide
+  
+### Changed
+- Updated README.md to include PyMongo in features
+- Enhanced MongoDB coverage: Now supports both sync (PyMongo) and async (Motor)
+- Test suite expanded to 164 tests (up from 149)
+
+### Technical
+- 15 new unit tests for PyMongo plugin
+- 100% test pass rate maintained
+- Zero breaking changes
+
 ## [1.5.0] - 2026-01-22
 
 ### Added

@@ -71,7 +71,7 @@ pip install timetracer[fastapi,httpx]    # FastAPI + httpx
 pip install timetracer[fastapi,aiohttp]  # FastAPI + aiohttp
 pip install timetracer[flask,requests]   # Flask + requests
 pip install timetracer[django,requests]  # Django + requests
-pip install timetracer[motor]            # Motor (MongoDB)
+pip install timetracer[motor]            # Motor (MongoDB async) + PyMongo (sync)
 ```
 
 ---
@@ -164,7 +164,7 @@ All settings are controlled via environment variables:
 |----------|-----------|
 | **Frameworks** | FastAPI, Flask, Django |
 | **HTTP Clients** | httpx, requests, aiohttp |
-| **Databases** | SQLAlchemy, Motor (MongoDB) |
+| **Databases** | SQLAlchemy, Motor (MongoDB async), PyMongo (MongoDB sync) |
 | **Cache** | Redis |
 | **Storage** | Local filesystem, AWS S3 |
 | **Testing** | pytest plugin with fixtures |
