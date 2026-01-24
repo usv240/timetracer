@@ -9,7 +9,7 @@ This module provides a thin wrapper and convenience functions for Starlette user
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from timetracer.config import TraceConfig
 
