@@ -5,7 +5,7 @@ All notable changes to Timetracer will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - v1.6.0
+## [1.6.0] - 2026-01-24
 
 ### Added
 - **PyMongo Plugin**: Synchronous MongoDB support
@@ -15,18 +15,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Automatic ObjectId and DateTime serialization
   - Perfect for Flask apps, Django sync views, ETL scripts
   - Integration with pytest fixtures
+- **Starlette Integration**: Lightweight ASGI framework support
+  - Complete middleware integration (reuses FastAPI's ASGI middleware)
+  - `auto_setup()` helper function for one-line configuration
+  - Full support for all Timetracer features (record, replay, plugins)
+  - Async/await support with httpx plugin
+  - Path parameters, query parameters, and headers capture
+  - Identical API to FastAPI integration (since FastAPI is built on Starlette)
+  - Zero overhead - just 84 lines of code!
 - **New Examples**:
   - `examples/pymongo_flask_app/` - Flask + PyMongo integration example
+  - `examples/starlette_example/` - Starlette + httpx + GitHub API example
 - **New Documentation**:
   - `docs/pymongo.md` - Comprehensive PyMongo guide
+  - `docs/starlette.md` - Comprehensive Starlette guide
   
 ### Changed
-- Updated README.md to include PyMongo in features
+- Updated README.md to include PyMongo and Starlette in features
 - Enhanced MongoDB coverage: Now supports both sync (PyMongo) and async (Motor)
-- Test suite expanded to 164 tests (up from 149)
+- Enhanced framework support: FastAPI, Starlette, Flask, Django
+- Test suite expanded to 170 tests (up from 149)
+- Updated `pyproject.toml` to mention Starlette in description and keywords
 
 ### Technical
 - 15 new unit tests for PyMongo plugin
+- 10 new integration tests for Starlette
 - 100% test pass rate maintained
 - Zero breaking changes
 
@@ -172,6 +185,7 @@ Initial release with core features:
 - Hybrid replay (mock some, live others)
 - Automatic sensitive data redaction
 
+[1.6.0]: https://github.com/usv240/timetracer/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/usv240/timetracer/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/usv240/timetracer/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/usv240/timetracer/compare/v1.2.0...v1.3.0

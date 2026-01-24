@@ -7,7 +7,7 @@ Note: These tests mock Motor since we may not have a real MongoDB instance.
 
 import sys
 from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
@@ -36,11 +36,11 @@ class TestMotorPluginWithoutMotor:
         """enable_motor should raise ImportError if motor not installed."""
         # Simulate motor not being installed
         import timetracer.plugins.motor_plugin as motor_plugin
-        
+
         # Save original
         original_enabled = motor_plugin._enabled
         motor_plugin._enabled = False
-        
+
         # Mock import to fail
         with patch.dict('sys.modules', {'motor': None, 'motor.motor_asyncio': None}):
             # Reset the module to test import behavior
@@ -49,7 +49,7 @@ class TestMotorPluginWithoutMotor:
                 import importlib
                 importlib.reload(motor_plugin)
                 motor_plugin.enable_motor()
-        
+
         # Restore
         motor_plugin._enabled = original_enabled
 
@@ -195,6 +195,7 @@ class TestMotorPluginSerialization:
     def test_safe_serialize_with_datetime(self):
         """Test serializing with datetime."""
         from datetime import datetime
+
         from timetracer.plugins.motor_plugin import _safe_serialize
 
         dt = datetime(2026, 1, 22, 12, 0, 0)
@@ -207,17 +208,14 @@ class TestMotorPluginEnableDisable:
 
     def test_enable_disable_cycle(self):
         """Test that enable/disable cycle works without error."""
-        from timetracer.plugins.motor_plugin import _enabled, disable_motor
-
-        # Initially disabled or enabled from previous tests
-        initial_state = _enabled
+        from timetracer.plugins.motor_plugin import disable_motor
 
         # Disable to known state
         disable_motor()
 
         # After disable, _enabled should be False
         from timetracer.plugins import motor_plugin
-        assert motor_plugin._enabled == False
+        assert not motor_plugin._enabled
 
     def test_double_disable_is_safe(self):
         """Double disable should not raise."""

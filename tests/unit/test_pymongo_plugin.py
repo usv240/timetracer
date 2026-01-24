@@ -165,6 +165,7 @@ class TestPyMongoPluginSerialization:
         """Test serializing dict with ObjectId."""
         pytest.importorskip("bson")
         from bson import ObjectId
+
         from timetracer.plugins.pymongo_plugin import _safe_serialize
 
         data = {"_id": ObjectId("507f1f77bcf86cd799439011"), "name": "Test"}
@@ -176,6 +177,7 @@ class TestPyMongoPluginSerialization:
     def test_safe_serialize_with_datetime(self):
         """Test serializing dict with datetime."""
         from datetime import datetime
+
         from timetracer.plugins.pymongo_plugin import _safe_serialize
 
         now = datetime(2026, 1, 22, 12, 0, 0)
@@ -243,8 +245,9 @@ class TestPyMongoPluginOperations:
     def test_find_one_signature_from_real_operation(self, mock_collection):
         """Test find_one creates correct signature from real operation."""
         pytest.importorskip("pymongo")
-        from timetracer.plugins.pymongo_plugin import _record_operation
         from unittest.mock import patch
+
+        from timetracer.plugins.pymongo_plugin import _record_operation
 
         with patch('timetracer.plugins.pymongo_plugin.get_current_session') as mock_session:
             mock_session.return_value = None  # No active session
@@ -259,27 +262,4 @@ class TestPyMongoPluginOperations:
             )
 
 
-class TestPyMongoPluginIntegration:
-    """Integration tests for PyMongo plugin (requires actual MongoDB)."""
 
-    @pytest.mark.integration
-    def test_full_record_cycle(self):
-        """Test full record cycle with PyMongo."""
-        # Skip immediately - requires MongoDB running
-        pytest.skip("Requires MongoDB running - integration test")
-
-        enable_pymongo()
-
-        client = MongoClient('mongodb://localhost:27017')
-        db = client.testdb
-
-        config = TraceConfig(mode="record")
-        session = TraceSession(config=config, request_method="TEST", request_path="/test")
-
-        # Perform operation
-        db.users.find_one({"email": "test@example.com"})
-
-        # Check session captured event
-        # assert len(session.events) > 0
-
-        disable_pymongo()

@@ -422,12 +422,12 @@ def test_create_user_recorded(timetracer_record):
 3. Verify a session is active (middleware creates sessions automatically)
 
 ```python
-# ✅ Correct order
+# Correct order
 enable_pymongo()
 client = MongoClient(...)
 db.users.find_one(...)  # Captured
 
-# ❌ Wrong order
+# Wrong order
 client = MongoClient(...)
 db.users.find_one(...)  # NOT captured
 enable_pymongo()  # Too late!
@@ -440,11 +440,11 @@ enable_pymongo()  # Too late!
 **Solution:** The plugin automatically handles ObjectIds. If you see this error, you're likely serializing manually. Let Timetracer handle it:
 
 ```python
-# ❌ Don't do this
+# Don't do this
 user = db.users.find_one({"_id": "123"})
 return jsonify(user)  # Error!
 
-# ✅ Do this
+# Do this
 user = db.users.find_one({"_id": "123"})
 if user:
     user['_id'] = str(user['_id'])  # Convert to string

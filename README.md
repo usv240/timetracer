@@ -1,6 +1,6 @@
 # Timetracer
 
-**Time-travel debugging for FastAPI and Flask** — Record API requests, replay with mocked dependencies.
+**Time-travel debugging for FastAPI, Starlette, Flask, and Django** — Record API requests, replay with mocked dependencies.
 
 [![CI](https://github.com/usv240/timetracer/actions/workflows/ci.yml/badge.svg)](https://github.com/usv240/timetracer/actions)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
@@ -68,7 +68,7 @@ Or install only what you need:
 
 ```bash
 pip install timetracer[fastapi,httpx]    # FastAPI + httpx
-pip install timetracer[fastapi,aiohttp]  # FastAPI + aiohttp
+pip install timetracer[starlette,httpx]  # Starlette + httpx
 pip install timetracer[flask,requests]   # Flask + requests
 pip install timetracer[django,requests]  # Django + requests
 pip install timetracer[motor]            # Motor (MongoDB async) + PyMongo (sync)
@@ -90,6 +90,15 @@ app = auto_setup(FastAPI())
 async def get_user(user_id: int):
     async with httpx.AsyncClient() as client:
         return (await client.get(f"https://api.example.com/users/{user_id}")).json()
+```
+
+### Starlette
+
+```python
+from starlette.applications import Starlette
+from timetracer.integrations.starlette import auto_setup
+
+app = auto_setup(Starlette(debug=True))
 ```
 
 ### Flask
@@ -162,7 +171,7 @@ All settings are controlled via environment variables:
 
 | Category | Supported |
 |----------|-----------|
-| **Frameworks** | FastAPI, Flask, Django |
+| **Frameworks** | FastAPI, Starlette, Flask, Django |
 | **HTTP Clients** | httpx, requests, aiohttp |
 | **Databases** | SQLAlchemy, Motor (MongoDB async), PyMongo (MongoDB sync) |
 | **Cache** | Redis |
@@ -229,6 +238,8 @@ Timetracer automatically protects sensitive data:
 - [Plugin Guide](docs/plugins.md)
 - [SQLAlchemy Integration](docs/sqlalchemy.md)
 - [Motor (MongoDB) Integration](docs/motor.md)
+- [PyMongo (MongoDB) Integration](docs/pymongo.md)
+- [Starlette Integration](docs/starlette.md)
 - [Flask Integration](docs/flask.md)
 - [Django Integration](docs/django.md)
 - [pytest Plugin](docs/pytest.md)

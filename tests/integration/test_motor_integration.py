@@ -8,7 +8,7 @@ allowing us to test the plugin without requiring a real MongoDB instance.
 import asyncio
 import sys
 from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
@@ -20,7 +20,6 @@ from timetracer.constants import EventType, TraceMode
 from timetracer.context import reset_session, set_session
 from timetracer.session import TraceSession
 from timetracer.types import RequestSnapshot, ResponseSnapshot
-
 
 # =============================================================================
 # Fixtures
@@ -57,12 +56,12 @@ def mock_motor_collection():
     # Create mock objects
     collection = MagicMock()
     collection.name = "users"
-    
+
     # Mock the database
     database = MagicMock()
     database.name = "testdb"
     collection.database = database
-    
+
     return collection
 
 
@@ -110,8 +109,6 @@ class TestMotorPluginRecording:
         from timetracer.plugins.motor_plugin import (
             _original_methods,
             _patched_find_one,
-            enable_motor,
-            disable_motor,
         )
 
         # Setup mock
@@ -124,7 +121,7 @@ class TestMotorPluginRecording:
         _original_methods["find_one"] = original
 
         # Call the patched method
-        result = await _patched_find_one(
+        await _patched_find_one(
             mock_motor_collection,
             {"email": "test@example.com"},
         )
@@ -414,8 +411,8 @@ class TestMotorPluginMultipleOperations:
         """Test that multiple operations are all recorded."""
         from timetracer.plugins.motor_plugin import (
             _original_methods,
-            _patched_insert_one,
             _patched_find_one,
+            _patched_insert_one,
             _patched_update_one,
         )
 

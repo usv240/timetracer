@@ -55,6 +55,65 @@ Your app runs with all external calls mocked.
 
 ---
 
+## Starlette
+
+> **Note**: Starlette is the lightweight ASGI framework that FastAPI is built on. The integration is identical!
+
+### 1. Install
+
+```bash
+pip install timetracer starlette httpx
+```
+
+### 2. Add Middleware
+
+```python
+# app.py
+from starlette.applications import Starlette
+from timetracer.integrations.starlette import TimeTracerMiddleware
+
+app = Starlette(debug=True)
+app.add_middleware(TimeTracerMiddleware)
+```
+
+Or use the one-liner:
+```python
+from timetracer.integrations.starlette import auto_setup
+auto_setup(app, plugins=["httpx"])
+```
+
+### 3. Enable HTTP Client Plugin
+
+```python
+from timetracer.plugins import enable_httpx
+enable_httpx()
+```
+
+### 4. Record
+
+```bash
+TIMETRACER_MODE=record uvicorn app:app --reload
+```
+
+Make some requests:
+```bash
+curl http://localhost:8000/your-endpoint
+```
+
+Check `./cassettes/` for saved recordings.
+
+### 5. Replay
+
+```bash
+TIMETRACER_MODE=replay \
+TIMETRACER_CASSETTE=./cassettes/GET__your-endpoint__abc123.json \
+uvicorn app:app
+```
+
+Your app runs with all external calls mocked. See [full Starlette docs](starlette.md).
+
+---
+
 ## Flask
 
 ### 1. Install

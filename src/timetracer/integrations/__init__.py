@@ -31,6 +31,16 @@ except ImportError:
     DjangoMiddleware = None
     django_auto_setup = None
 
+# Starlette is optional (but shares FastAPI's middleware)
+try:
+    from timetracer.integrations.starlette import TimeTracerMiddleware as StarletteMiddleware
+    from timetracer.integrations.starlette import auto_setup as starlette_auto_setup
+    _HAS_STARLETTE = True
+except ImportError:
+    _HAS_STARLETTE = False
+    StarletteMiddleware = None
+    starlette_auto_setup = None
+
 __all__ = [
     "TimeTracerMiddleware",
     "TimeTraceMiddleware",  # Deprecated alias
@@ -41,6 +51,8 @@ __all__ = [
     "flask_auto_setup",
     "DjangoMiddleware",
     "django_auto_setup",
+    "StarletteMiddleware",
+    "starlette_auto_setup",
 ]
 
 

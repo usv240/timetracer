@@ -39,16 +39,16 @@ async def get_user(user_id: str):
 
 | Operation | Captured | Notes |
 |-----------|----------|-------|
-| `find_one` | ✅ Yes | Full capture with timing |
-| `insert_one` | ✅ Yes | Captures inserted_id |
-| `insert_many` | ✅ Yes | Captures count |
-| `update_one` | ✅ Yes | Captures matched/modified counts |
-| `update_many` | ✅ Yes | Captures matched/modified counts |
-| `delete_one` | ✅ Yes | Captures deleted count |
-| `delete_many` | ✅ Yes | Captures deleted count |
-| `count_documents` | ✅ Yes | Captures count result |
-| `aggregate` | ✅ Partial | Cursor creation captured |
-| `find` | ✅ Partial | Cursor creation captured |
+| `find_one` | Yes | Full capture with timing |
+| `insert_one` | Yes | Captures inserted_id |
+| `insert_many` | Yes | Captures count |
+| `update_one` | Yes | Captures matched/modified counts |
+| `update_many` | Yes | Captures matched/modified counts |
+| `delete_one` | Yes | Captures deleted count |
+| `delete_many` | Yes | Captures deleted count |
+| `count_documents` | Yes | Captures count result |
+| `aggregate` | Partial | Cursor creation captured |
+| `find` | Partial | Cursor creation captured |
 
 **Note:** For `find()` and `aggregate()`, the cursor creation is captured, but individual document iteration is not. This is because cursors are lazy and may be iterated outside the plugin's scope.
 
@@ -262,11 +262,11 @@ docker stop mongo-test && docker rm mongo-test
 Ensure the plugin is enabled **before** creating Motor clients:
 
 ```python
-# ✅ Correct order
+# Correct order
 enable_motor()
 client = AsyncIOMotorClient(...)
 
-# ❌ Wrong order - plugin won't capture
+# Wrong order - plugin won't capture
 client = AsyncIOMotorClient(...)
 enable_motor()  # Too late!
 ```
